@@ -1,3 +1,4 @@
+import { english } from './prompt-lab.en.js';
 // A room owns its configuration and hooks. Solutions stay on the server.
 export const room = {
   id: 'prompt-lab', title: 'Das Prompt-Labor', duration: '10–15 Min.',
@@ -57,9 +58,19 @@ export const room = {
   ]
 };
 
-export function stageView(stage, role, hintLevel = 0) {
-  const s = room.stages[stage];
+export function stageView(stage, role, hintLevel = 0, locale = 'de') {
+  const original = room.stages[stage];
+  const s = original && (locale === 'en' ? { ...original, ...english.stages[stage] } : original);
   if (!s) return null;
   const common = { title: s.title, label: s.label, hints: s.hints.slice(0, hintLevel) };
   return role === 'manual' ? { ...common, manual: s.manual } : { ...common, task: s.task, kind: s.kind, slots: s.slots, choices: s.choices };
+}
+
+export function novaMessage(message, locale) {
+  if (locale !== 'en') return message;
+  if (message === 'Ich habe die Tür geschlossen. Zugluft senkt die Effizienz.') return 'I closed the door. Draughts reduce efficiency.';
+  for (let i = 0; i < room.stages.length; i++) {
+    for (const key of ['success', 'failure']) if (room.stages[i][key] === message) return english.stages[i][key];
+  }
+  return 'I am ready to optimise. Apparently, humans would prefer to collaborate.';
 }

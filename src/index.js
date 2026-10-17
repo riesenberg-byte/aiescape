@@ -1,5 +1,6 @@
 import { assets } from './generated/assets.js';
-import { room, stageView } from './rooms/prompt-lab.js';
+import { room, stageView, novaMessage } from './rooms/prompt-lab.js';
+import { errorsEnglish } from './errors.en.js';
 
 const SECURITY = {
   'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer',
@@ -44,16 +45,17 @@ async function player(request, env) {
   if (!s || Date.now() - s.created_at > 86400000) fail(410, 'Diese Sitzung ist abgelaufen. Starte ein neues Team.');
   return { p, s };
 }
-async function view(env, p, s) {
+async function view(env, p, s, locale = 'de') {
   const counts = await env.DB.prepare('SELECT role, COUNT(*) AS count FROM players WHERE session_code = ? GROUP BY role').bind(s.code).all();
   return { code: s.code, team: s.team, location: s.location, role: p.role, stage: s.stage, revision: s.revision,
     startedAt: s.started_at, finishedAt: s.finished_at, hints: s.hints, mistakes: s.mistakes,
-    message: s.last_message, listed: Boolean(s.listed), serverTime: Date.now(),
+    message: novaMessage(s.last_message, locale), locale, listed: Boolean(s.listed), serverTime: Date.now(),
     score: s.finished_at ? score(s) : null, players: counts.results,
-    room: { id: room.id, title: room.title, total: room.stages.length },
-    puzzle: stageView(s.stage, p.role, s.hint_level) };
+    room: { id: room.id, title: locale === 'en' ? 'The Prompt Lab' : room.title, total: room.stages.length },
+    puzzle: stageView(s.stage, p.role, s.hint_level, locale) };
 }
 async function api(request, env, pathname) {
+  const locale = request.headers.get('X-Game-Language') === 'en' ? 'en' : 'de';
   if (request.method !== 'GET' && request.method !== 'POST') fail(405, 'Methode nicht unterstützt.');
   const origin = request.headers.get('Origin');
   if (origin && origin !== new URL(request.url).origin) fail(403, 'Fremder Ursprung.');
@@ -84,7 +86,7 @@ async function api(request, env, pathname) {
       env.DB.prepare('INSERT INTO players (token_hash, session_code, role, created_at) VALUES (?, ?, ?, ?)').bind(tokenHash, code, 'terminal', now)
     ]);
     const s = await env.DB.prepare('SELECT * FROM sessions WHERE code = ?').bind(code).first();
-    return json({ token, state: await view(env, { role: 'terminal' }, s) }, 201);
+    return json({ token, state: await view(env, { role: 'terminal' }, s, locale) }, 201);
   }
   if (pathname === '/api/join' && request.method === 'POST') {
     const data = await body(request); const code = clean(data.code, 12).toUpperCase().replace(/[ -]/g, '');
@@ -94,11 +96,11 @@ async function api(request, env, pathname) {
     const role = data.role === 'terminal' ? 'terminal' : 'manual';
     const token = crypto.randomUUID();
     await env.DB.prepare('INSERT INTO players (token_hash, session_code, role, created_at) VALUES (?, ?, ?, ?)').bind(await hash(token), code, role, Date.now()).run();
-    return json({ token, state: await view(env, { role }, s) }, 201);
+    return json({ token, state: await view(env, { role }, s, locale) }, 201);
   }
   if (!['/api/state', '/api/action'].includes(pathname)) fail(404, 'Nicht gefunden.');
   const { p, s } = await player(request, env);
-  if (pathname === '/api/state' && request.method === 'GET') return json(await view(env, p, s));
+  if (pathname === '/api/state' && request.method === 'GET') return json(await view(env, p, s, locale));
   if (pathname !== '/api/action' || request.method !== 'POST') fail(405, 'Methode nicht unterstützt.');
   const data = await body(request);
   if (data.type === 'role') {
@@ -135,23 +137,26 @@ async function api(request, env, pathname) {
     if (result.meta.changes !== 1) fail(409, 'Der Spielstand hat sich geändert. Bitte erneut versuchen.');
   }
   const current = await env.DB.prepare('SELECT * FROM sessions WHERE code = ?').bind(s.code).first();
-  return json(await view(env, p, current));
+  return json(await view(env, p, current, locale));
 }
 
 export default {
   async fetch(request, env) {
     const { pathname } = new URL(request.url);
+    const locale = request.headers.get('X-Game-Language') === 'en' ? 'en' : 'de';
     try {
       if (pathname.startsWith('/api/')) return await api(request, env, pathname);
-      if (!['GET', 'HEAD'].includes(request.method)) return json({ error: 'Methode nicht unterstützt.' }, 405);
+      if (!['GET', 'HEAD'].includes(request.method)) return json({ error: locale === 'en' ? errorsEnglish['Methode nicht unterstützt.'] : 'Methode nicht unterstützt.' }, 405);
       const asset = assets[pathname === '/' ? '/index.html' : pathname];
-      if (!asset) return json({ error: 'Nicht gefunden.' }, 404);
-      return new Response(request.method === 'HEAD' ? null : asset.body, { headers: { ...SECURITY, 'Content-Type': asset.type,
+      if (!asset) return json({ error: locale === 'en' ? errorsEnglish['Nicht gefunden.'] : 'Nicht gefunden.' }, 404);
+      const content = pathname === '/manifest.webmanifest' && new URL(request.url).searchParams.get('lang') === 'en'
+        ? JSON.stringify({ ...JSON.parse(asset.body), name: 'AI Escape — NOVA’s Prompt Lab', lang: 'en', start_url: '/?lang=en' }) : asset.body;
+      return new Response(request.method === 'HEAD' ? null : content, { headers: { ...SECURITY, 'Content-Type': asset.type,
         'Cache-Control': pathname === '/' || pathname === '/sw.js' ? 'no-cache' : 'public, max-age=300' } });
     } catch (error) {
-      if (error instanceof HttpError) return json({ error: error.message }, error.status);
+      if (error instanceof HttpError) return json({ error: locale === 'en' ? errorsEnglish[error.message] || 'Please try again.' : error.message }, error.status);
       console.error(JSON.stringify({ event: 'request_failed', path: pathname, name: error.name }));
-      return json({ error: 'NOVA hat sich verheddert. Bitte gleich erneut versuchen.' }, 500);
+      return json({ error: locale === 'en' ? errorsEnglish['NOVA hat sich verheddert. Bitte gleich erneut versuchen.'] : 'NOVA hat sich verheddert. Bitte gleich erneut versuchen.' }, 500);
     }
   }
 };

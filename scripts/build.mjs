@@ -1,6 +1,11 @@
 import { readdir, readFile, mkdir, writeFile } from 'node:fs/promises';
+import { build } from 'esbuild';
+// Bundle three.js locally. Browsers never depend on a CDN or an import map.
+const result = await build({ entryPoints: [new URL('../client/voxel-room.js', import.meta.url).pathname], bundle: true, minify: true, format: 'esm', target: 'es2022', write: false, legalComments: 'inline' });
 const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml', '.webmanifest': 'application/manifest+json' };
 const assets = {};
+const threeLicense = await readFile(new URL('../node_modules/three/LICENSE', import.meta.url), 'utf8');
+assets['/voxel-room.js'] = { type: 'text/javascript; charset=utf-8', body: `/* three.js\n${threeLicense}\n*/\n${result.outputFiles[0].text}` };
 for (const file of (await readdir(new URL('../public/', import.meta.url))).sort()) {
   const ext = file.slice(file.lastIndexOf('.'));
   if (!types[ext]) throw new Error(`Unsupported public asset ${file}`);

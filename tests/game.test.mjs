@@ -4,6 +4,8 @@ import { DatabaseSync } from 'node:sqlite';
 import { readFileSync } from 'node:fs';
 import worker from '../src/index.js';
 import { room, stageView } from '../src/rooms/prompt-lab.js';
+import { messages, chooseLanguage } from '../public/i18n.js';
+import { START, canStand, movePlayer } from '../client/world.js';
 
 // Runs the actual production SQL against SQLite; the adapter only models D1's
 // prepare/bind/batch transport, not game rules.
@@ -116,4 +118,56 @@ test('public assets have security headers and no client bundle contains room sol
 test('rate limiting prevents database access after the limit is reached',async()=>{
   const api=client({API_LIMITER:{limit:async()=>({success:false})}});
   assert.equal((await api('/api/sessions',{team:'Limited'})).status,429);
+});
+
+test('English and German teammates share progress, stable answers, and translated NOVA messages',async()=>{
+  const DB=database(),api=client({DB}),en={'X-Game-Language':'en'};
+  const created=await api('/api/sessions',{team:'Mixed language team',location:'München'},undefined,en);
+  const token=created.data.token,code=created.data.state.code;
+  assert.equal(created.data.state.locale,'en');
+  assert.equal(created.data.state.room.title,'The Prompt Lab');
+  assert.equal(created.data.state.puzzle.slots[0].label,'Who is it for?');
+  assert.match(created.data.state.message,/I closed the door/);
+  const joined=await api('/api/join',{code,role:'manual'}),manual=joined.data.token;
+  assert.equal(joined.data.state.locale,'de');
+  assert.match(joined.data.state.puzzle.manual[0][1],/Mitarbeitenden/);
+  let state=(await api('/api/action',{type:'start',revision:0},token,en)).data;
+  state=(await api('/api/action',{type:'hint',revision:state.revision},token,en)).data;
+  assert.match(state.puzzle.hints[0],/A good prompt/);
+  for(const [i,answer]of[{audience:'team',when:'a',where:'atrium',format:'short'},'B',['data','draft','review','send']].entries()){
+    state=(await api('/api/action',{type:'answer',answer,revision:state.revision},token,en)).data;
+    assert.equal(state.stage,i+1);
+    const german=(await api('/api/state',undefined,manual)).data;
+    assert.equal(german.revision,state.revision);assert.equal(german.stage,state.stage);
+    assert.notEqual(german.message,state.message);
+  }
+  assert.match(state.message,/Door unlocked/);
+  assert.equal((await api('/api/state',undefined,token,{'X-Game-Language':'fr'})).data.locale,'de');
+  assert.equal((await api('/api/state',undefined,undefined,en)).data.error,'Please join a team first.');
+  DB.sqlite.close();
+});
+
+test('language selection respects explicit links and preferences and every key has both texts',()=>{
+  assert.equal(chooseLanguage({search:'?lang=en',saved:'de',languages:['de-DE']}),'en');
+  assert.equal(chooseLanguage({saved:'de',languages:['ro-RO']}),'de');
+  assert.equal(chooseLanguage({languages:['ro-RO','en-GB']}),'en');
+  assert.equal(chooseLanguage({languages:['de-AT']}),'de');
+  for(const [key,pair]of Object.entries(messages)){assert.equal(pair.length,2,key);assert.ok(pair.every(s=>typeof s==='string'&&s.length),key);}
+  for(const role of ['terminal','manual'])for(let stage=0;stage<3;stage++){
+    const de=stageView(stage,role,2,'de'),en=stageView(stage,role,2,'en');
+    assert.notEqual(de.title,en.title);assert.equal(en.hints.length,2);
+    if(de.slots)assert.deepEqual(de.slots.map(s=>[s.id,s.options.map(o=>o[0])]),en.slots.map(s=>[s.id,s.options.map(o=>o[0])]));
+    if(de.choices)assert.deepEqual(de.choices.map(c=>c[0]),en.choices.map(c=>c[0]));
+  }
+});
+
+test('walking respects walls, furniture, diagonal sliding, and the locked exit',()=>{
+  assert.ok(canStand(START.x,START.z));
+  assert.ok(!canStand(0,0));assert.ok(!canStand(-3.7,-2.3));assert.ok(!canStand(6,0));
+  assert.ok(!canStand(0,-6.5,false));assert.ok(canStand(0,-6.5,true));assert.ok(!canStand(2,-6.5,true));
+  const forward=movePlayer(START,0,-100);assert.ok(forward.z>=1);assert.ok(forward.z<START.z);
+  const throughWall=movePlayer({x:3,z:3},50,0);assert.ok(throughWall.x<=5.65);
+  const slide=movePlayer({x:5.6,z:2},1,-1);assert.ok(slide.z<2);assert.ok(slide.x<=5.65);
+  assert.ok(movePlayer({x:0,z:-5.2},0,-3,false).z>=-5.65);
+  assert.ok(movePlayer({x:0,z:-5.2},0,-2,true).z<-7);
 });
