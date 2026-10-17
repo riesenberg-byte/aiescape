@@ -9,7 +9,7 @@ export function createVoxelRoom(host, { t, onInteract, unlocked = false, snapsho
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   let active = false, disposed = false, frame = 0, previous = performance.now(), visible = true, near = null, dirty = true;
   let dragging = null, dragX = 0, dragY = 0, exited = false;
-  const scene = new THREE.Scene(); scene.background = new THREE.Color('#dce5dc'); scene.fog = new THREE.Fog('#dce5dc', 11, 27);
+  const scene = new THREE.Scene(); scene.background = new THREE.Color('#e1ebe1'); scene.fog = new THREE.Fog('#e1ebe1', 11, 27);
   const camera = new THREE.PerspectiveCamera(68, 1, 0.06, 40); camera.rotation.order = 'YXZ';
   const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: false, powerPreference: 'low-power' });
   renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 1));
@@ -55,8 +55,8 @@ export function createVoxelRoom(host, { t, onInteract, unlocked = false, snapsho
   function desk(x) {
     box(x, 1, -2.3, 2.5, 0.2, 1.5, '#c8b88f');
     for (const dx of [-1, 1]) for (const dz of [-0.5, 0.5]) box(x + dx, 0.44, -2.3 + dz, 0.13, 0.9, 0.13, '#667e6a');
-    box(x, 1.55, -2.65, 1.55, 0.95, 0.16, '#263e3d');
-    box(x, 1.15, -2.65, 0.2, 0.2, 0.25, '#263e3d');
+    box(x, 1.55, -2.65, 1.55, 0.95, 0.16, '#153f3b');
+    box(x, 1.15, -2.65, 0.2, 0.2, 0.25, '#153f3b');
     box(x, 1.115, -2.05, 1.1, 0.04, 0.32, '#e5e1cc');
     for (let i = 0; i < 7; i++) box(x - 0.42 + i * 0.14, 1.14, -2.05, 0.09, 0.02, 0.22, '#a7b29b');
     box(x + 0.95, 1.23, -2.15, 0.2, 0.3, 0.2, '#f2eee1');
@@ -77,12 +77,12 @@ export function createVoxelRoom(host, { t, onInteract, unlocked = false, snapsho
   box(4.8, 0.9, -4.7, 1.5, 1.8, 0.7, '#8e9b7d');
   for (const y of [0.4, 0.95, 1.5]) {
     box(4.8, y, -4.65, 1.6, 0.1, 0.8, '#c5b591');
-    for (let i = 0; i < 6; i++) box(4.25 + i * 0.22, y + 0.22, -4.58, 0.16, 0.35, 0.4, ['#3256e8', '#d7de93', '#d99b74'][i % 3]);
+    for (let i = 0; i < 6; i++) box(4.25 + i * 0.22, y + 0.22, -4.58, 0.16, 0.35, 0.4, ['#62b45d', '#d7de93', '#d99b74'][i % 3]);
   }
   box(0, 0.2, 0, 1.5, 0.4, 1.5, '#486d5d'); box(0, 0.5, 0, 1.25, 0.2, 1.25, '#8baf89');
   // Floor guidance stripes lead toward the three interactive stations.
-  for (let i = 0; i < 4; i++) for (const side of [-1, 1]) box(side * (1.3 + i * 0.6), 0.018, 1.1, 0.3, 0.02, 0.07, '#daf078', true);
-  for (let z = -4.8; z < -1.5; z += 0.65) box(0, 0.018, z, 0.12, 0.02, 0.32, '#3256e8');
+  for (let i = 0; i < 4; i++) for (const side of [-1, 1]) box(side * (1.3 + i * 0.6), 0.018, 1.1, 0.3, 0.02, 0.07, '#d1f55e', true);
+  for (let z = -4.8; z < -1.5; z += 0.65) box(0, 0.018, z, 0.12, 0.02, 0.32, '#62b45d');
   for (const [mat, cubes] of batches) {
     const mesh = new THREE.InstancedMesh(geometry, mat, cubes.length); const transform = new THREE.Object3D();
     cubes.forEach(([x,y,z,w,h,d], i) => { transform.position.set(x,y,z); transform.scale.set(w,h,d); transform.updateMatrix(); mesh.setMatrixAt(i, transform.matrix); });
@@ -90,18 +90,18 @@ export function createVoxelRoom(host, { t, onInteract, unlocked = false, snapsho
   }
   const robot = new THREE.Group();
   function robotBox(x,y,z,w,h,d,color,glow=false) { const mesh=new THREE.Mesh(geometry,material(color,glow));mesh.position.set(x,y,z);mesh.scale.set(w,h,d);robot.add(mesh);return mesh; }
-  robotBox(0,1.4,0,0.86,1.35,0.75,'#94c7ae'); robotBox(0,2.1,0,1,0.65,0.85,'#b6ddb8');
+  robotBox(0,1.4,0,0.86,1.35,0.75,'#81b5a1'); robotBox(0,2.1,0,1,0.65,0.85,'#a5d6b0');
   robotBox(0,2.1,0.442,0.78,0.4,0.03,'#233f40');
-  for (const x of [-0.2,0.2]) robotBox(x,2.13,0.47,0.13,0.13,0.04,'#dafa70',true);
+  for (const x of [-0.2,0.2]) robotBox(x,2.13,0.47,0.13,0.13,0.04,'#d1f55e',true);
   robotBox(0,1.8,0.43,0.25,0.04,0.03,'#557e67');robotBox(0,2.56,0,0.06,0.3,0.06,'#547862');
-  robotBox(0,2.76,0,0.13,0.13,0.13,'#3256e8',true);
-  robotBox(0,1.36,0.4,0.48,0.35,0.04,'#3256e8');
+  robotBox(0,2.76,0,0.13,0.13,0.13,'#62b45d',true);
+  robotBox(0,1.36,0.4,0.48,0.35,0.04,'#62b45d');
   for(const side of [-1,1])robotBox(side*0.6,1.45,0,0.22,0.6,0.25,'#75a98b');
   scene.add(robot);
   const door=new THREE.Mesh(geometry,material('#42685c'));door.scale.set(1.95,2.65,0.22);door.position.set(0,1.325,-5.95);scene.add(door);
-  const doorStrip=new THREE.Mesh(geometry,material(unlocked?'#dafa70':'#f49064',true));doorStrip.scale.set(1.7,0.09,0.04);doorStrip.position.set(0,2.4,-5.81);scene.add(doorStrip);
+  const doorStrip=new THREE.Mesh(geometry,material(unlocked?'#d1f55e':'#f49064',true));doorStrip.scale.set(1.7,0.09,0.04);doorStrip.position.set(0,2.4,-5.81);scene.add(doorStrip);
   const labelPlanes=[];
-  function label(x,y,z,w,h,text,key,bg='#243b3d',color='#dafa70') {
+  function label(x,y,z,w,h,text,key,bg='#153f3b',color='#d1f55e') {
     const c=document.createElement('canvas');c.width=512;c.height=256;const ctx=c.getContext('2d');
     const texture=new THREE.CanvasTexture(c);texture.colorSpace=THREE.SRGBColorSpace;texture.magFilter=THREE.NearestFilter;texture.minFilter=THREE.LinearFilter;textures.add(texture);
     const mat=new THREE.MeshBasicMaterial({map:texture});const plane=new THREE.Mesh(new THREE.PlaneGeometry(w,h),mat);plane.position.set(x,y,z);scene.add(plane);
@@ -183,7 +183,7 @@ export function createVoxelRoom(host, { t, onInteract, unlocked = false, snapsho
     camera.position.set(player.x,1.65,player.z);camera.rotation.set(player.pitch,player.yaw,0);
     robot.position.y=reducedMotion?0:Math.sin(now*0.0015)*0.045;
     door.position.x=THREE.MathUtils.damp(door.position.x,unlocked?2.05:0,5,dt);
-    doorStrip.position.x=door.position.x;doorStrip.material=material(unlocked?'#dafa70':'#f49064',true);
+    doorStrip.position.x=door.position.x;doorStrip.material=material(unlocked?'#d1f55e':'#f49064',true);
     camera.getWorldDirection(direction);
     interaction();
     host.querySelector('.voxel-location').textContent=`X ${player.x.toFixed(1)} / Z ${player.z.toFixed(1)}`;

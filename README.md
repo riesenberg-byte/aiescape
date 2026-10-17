@@ -13,6 +13,7 @@ A cooperative browser escape game about AI, good questions, and human teamwork. 
 | Write a mission or a puzzle | [Mission authoring](docs/mission-authoring.md) and the [copyable example](examples/missions/README.md) |
 | Build scenery or expand the voxel landscape | [World building](docs/world-building.md) |
 | Understand the code and shared game state | [Architecture](docs/architecture.md) and [API reference](docs/api.md) |
+| Maintain the forest/sage/lime visual style | [Visual design](docs/visual-design.md) |
 | Improve English/German text | [Localization](docs/localization.md) |
 | Plan the next missions and objectives | [Game design](docs/game-design.md) and [roadmap](docs/roadmap.md) |
 | Test or deploy a change | [Testing](docs/testing.md) and [operations](docs/operations.md) |
@@ -32,7 +33,7 @@ Select **Explore the 3D lab** on the home page, or use the mission's 3D view. **
 
 ## Current state and direction
 
-Version **0.2.0** includes one complete mission, the Prompt Lab: precise instructions, source checking, and a safe approval workflow. It has English/German text, asymmetric cooperative views, a walkable voxel room, shared progress, hints, and an optional leaderboard.
+Version **0.2.1** includes one complete mission, the Prompt Lab: precise instructions, source checking, and a safe approval workflow. It has English/German text, asymmetric cooperative views, a walkable voxel room, shared progress, hints, and an optional leaderboard.
 
 The direction is a connected landscape with several missions, meaningful objectives, and areas colleagues can build together. **Mission selection, campaign progression, a data-driven world editor, and shared 3D avatars are planned work**, not existing features. See the [roadmap](docs/roadmap.md) for dependencies and acceptance criteria.
 

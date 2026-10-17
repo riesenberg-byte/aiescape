@@ -59,7 +59,7 @@ async function leaderboard() {
 function playerCounts() {return `<span>${t('terminal').toUpperCase()}: ${state.players.find(p=>p.role==='terminal')?.count||0}</span><span>${t('manual').toUpperCase()}: ${state.players.find(p=>p.role==='manual')?.count||0}</span>`;}
 function scene() {
   return `<aside class="game-scene"><div class="scene-heading"><div class="eyebrow">${t(state.finishedAt?'unlockedSector':'lockedSector')}</div><button type="button" class="view-toggle" data-action="view">${t(use3d?'view2d':'view3d')}</button></div>
-    ${use3d?`<div class="voxel-host" id="game-voxel"><p class="voxel-loading">${t('voxelLoading')}</p></div><p class="voxel-note">${t('voxelLocal')}</p>`:`<img src="/lab.svg" alt="${escape(t('voxelTitle'))}">`}
+    ${use3d?`<div class="voxel-host" id="game-voxel"><p class="voxel-loading">${t('voxelLoading')}</p></div><p class="voxel-note">${t('voxelLocal')}</p>`:`<img src="/lab.svg?v=0.2.1" alt="${escape(t('voxelTitle'))}">`}
     <div class="nova-bubble" role="status"><span class="nova-mini" aria-hidden="true">• •</span><div><strong>NOVA <span>OFFICE OPTIMIZATION AGENT</span></strong><p>${escape(state.message)}</p></div></div>
     <div class="progress-list" aria-label="${t('progress')}">${['precise','sources','responsible'].map((key,i)=>`<div class="progress-item ${i<state.stage?'done':i===state.stage?'current':''}"><span>${i<state.stage?'✓':'0'+(i+1)}</span>${t(key)}</div>`).join('')}</div></aside>`;
 }
@@ -109,7 +109,7 @@ function renderGame(force=false,draft=null){
 }
 async function mountGameView(){
   if(voxelLoading||gameView||!use3d)return;voxelLoading=true;
-  try{const {createVoxelRoom}=await import('./voxel-room.js');if(!state||!use3d||!$('#game-voxel'))return;gameView=createVoxelRoom($('#game-voxel'),{t,unlocked:Boolean(state.finishedAt),snapshot:voxelSnapshot,onInteract:interactStation});}
+  try{const {createVoxelRoom}=await import('./voxel-room.js?v=0.2.1');if(!state||!use3d||!$('#game-voxel'))return;gameView=createVoxelRoom($('#game-voxel'),{t,unlocked:Boolean(state.finishedAt),snapshot:voxelSnapshot,onInteract:interactStation});}
   catch{if($('#game-voxel'))$('#game-voxel').innerHTML=`<p class="voxel-fallback">${t('voxelFallback')}</p>`;}
   finally{voxelLoading=false;}
 }
@@ -126,7 +126,7 @@ function interactStation(target){
 async function exploreDialog(){
   showDialog(`<div class="eyebrow">${t('view3d')}</div><h2>${t('voxelTitle')}</h2><p class="form-note">${t('demoNote')}</p><div class="voxel-host" id="demo-voxel"><p class="voxel-loading">${t('voxelLoading')}</p></div>`, 'explore');
   const target=$('#demo-voxel');
-  try{const {createVoxelRoom}=await import('./voxel-room.js');if(!target.isConnected||!dialog.open)return;demoView=createVoxelRoom(target,{t,onInteract:interactStation});}
+  try{const {createVoxelRoom}=await import('./voxel-room.js?v=0.2.1');if(!target.isConnected||!dialog.open)return;demoView=createVoxelRoom(target,{t,onInteract:interactStation});}
   catch{if(target.isConnected)target.innerHTML=`<p class="voxel-fallback">${t('voxelFallback')}</p>`;}
 }
 function updateTimer(){if(!state||!$('#timer'))return;$('#timer').textContent=state.startedAt?time(((state.finishedAt||Date.now()+serverOffset)-state.startedAt)/1000):'00:00';}

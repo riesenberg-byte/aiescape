@@ -65,7 +65,7 @@ For future objectives such as “restore power”, propose both the server-side 
 
 ## Visual and performance conventions
 
-- Keep the block-based palette coherent: sage/neutral office colors, blue interaction accents, lime highlights and readable dark panels.
+- Keep the block-based palette coherent: forest/sage office colors, green interaction accents, lime highlights and readable dark panels.
 - Use simple silhouettes, generous paths, and landmarks visible at human eye height. Avoid relying only on color to explain a goal.
 - Reuse materials and static batches. Check desktop and touch performance before adding shadows, transparency, large textures or many animated elements.
 - Keep text in translation keys or generated labels. Update the 2D overview when a material navigation change makes it misleading.

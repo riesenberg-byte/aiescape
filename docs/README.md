@@ -1,6 +1,6 @@
 # Documentation
 
-These guides describe **AI Escape 0.2.0**. The main technical guides are in English for cross-location collaboration. [Deutscher Schnelleinstieg](quickstart.de.md).
+These guides describe **AI Escape 0.2.1**. The main technical guides are in English for cross-location collaboration. [Deutscher Schnelleinstieg](quickstart.de.md).
 
 | Guide | Purpose |
 | --- | --- |
@@ -11,6 +11,7 @@ These guides describe **AI Escape 0.2.0**. The main technical guides are in Engl
 | [API reference](api.md) | Requests, responses, actions and failure handling |
 | [Mission authoring](mission-authoring.md) | Current module contract, puzzle kinds, examples and integration limits |
 | [World building](world-building.md) | Geometry, coordinates, collisions, stations and landscape growth |
+| [Visual design](visual-design.md) | Colors, components, contrast and theme maintenance |
 | [Localization](localization.md) | Language selection, UI/content/error translations and stable IDs |
 | [Testing](testing.md) | Automated coverage, manual browser scenarios and playtest reports |
 | [Operations](operations.md) | Cloudflare deployment, verification, rollback and data lifecycle |
