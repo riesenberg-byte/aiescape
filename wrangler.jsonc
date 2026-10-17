@@ -1,0 +1,19 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "aiescape",
+  "main": "src/index.js",
+  "account_id": "e07baca941bf66c5c59d94b06f4ea431",
+  "compatibility_date": "2026-10-17",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": false,
+  "routes": [{ "pattern": "aiescape.myapps.fans", "custom_domain": true }],
+  "observability": { "enabled": true, "head_sampling_rate": 1 },
+  "d1_databases": [{
+    "binding": "DB",
+    "database_name": "aiescape",
+    "database_id": "8aacd6e5-1f06-43ef-8cac-0b4355ec3bae",
+    "migrations_dir": "migrations"
+  }],
+  "ratelimits": [{ "name": "API_LIMITER", "namespace_id": "1423526300", "simple": { "limit": 600, "period": 60 } },
+    { "name": "CREATE_LIMITER", "namespace_id": "1423526301", "simple": { "limit": 10, "period": 60 } }]
+}

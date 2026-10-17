@@ -1,0 +1,19 @@
+{
+  "name": "aiescape",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node tests/game.test.mjs",
+    "dev": "npm run build && wrangler dev",
+    "deploy": "npm run build && wrangler deploy",
+    "db:local": "wrangler d1 migrations apply aiescape --local",
+    "db:remote": "wrangler d1 migrations apply aiescape --remote",
+    "types": "wrangler types"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261016.1",
+    "wrangler": "^4.151.1"
+  }
+}
