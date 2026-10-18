@@ -14,7 +14,7 @@ The current API serves the single Prompt Lab mission. This is an implementation 
 | Endpoint | Method | Auth | Result |
 | --- | --- | --- | --- |
 | `/api/health` | GET | No | D1 health check and room ID |
-| `/api/leaderboard` | GET | No | Up to 20 voluntarily published results ordered by score |
+| `/api/leaderboard` | GET | No | Up to 100 voluntarily published results from sessions created in the last 30 days, ordered by score; optional `?location=` filter |
 | `/api/sessions` | POST | No | Create a lobby and terminal player; 201 with `{ token, state }` |
 | `/api/join` | POST | No | Join by code; 201 with `{ token, state }` |
 | `/api/state` | GET | Player | Current role-specific state |
@@ -26,13 +26,17 @@ The current API serves the single Prompt Lab mission. This is an implementation 
 { "team": "Prompt Pirates", "location": "Remote" }
 ```
 
-Team names are trimmed, stripped of control characters and angle brackets, and capped at 40 characters; at least two characters must remain. Accepted stored locations are `Berlin`, `München`, `Frankfurt`, `Remote`, and `Anderer Standort`; unsupported values use `Remote`. These are canonical data values; the UI translates their labels.
+Team names are trimmed, stripped of control characters and angle brackets, and capped at 40 characters; at least two characters must remain. Accepted stored locations are `Stuttgart`, `Berlin`, `München`, `Frankfurt`, `Köln`, `Düsseldorf`, `Hamburg`, `Hannover`, `Bukarest`, `Remote`, and `Anderer Standort`; unsupported values use `Remote`. These are canonical data values; the UI translates their labels.
 
 ```json
 { "code": "ABCDEFGH", "role": "manual" }
 ```
 
 The code above is illustrative, not a working team. Codes are eight characters; joining accepts lowercase and removes spaces/hyphens. `terminal` explicitly chooses that role; other input currently defaults to `manual`. Role updates after joining reject unknown roles.
+
+### Leaderboard filters
+
+`GET /api/leaderboard?location=Bukarest` returns only that stored location. URL-encode non-ASCII values, e.g. `?location=K%C3%B6ln`. Missing/empty `location` means all locations. Unknown non-empty filters return 400, translated through `X-Game-Language`. Filtering happens before the 100-row limit. Only finished, explicitly listed sessions created within 30 days are visible; expired rows are excluded without waiting for cleanup. This is a shared rolling leaderboard, without event IDs or per-office aggregate scores.
 
 ### State response
 

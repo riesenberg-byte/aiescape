@@ -6,6 +6,7 @@ import worker from '../src/index.js';
 import { room, stageView } from '../src/rooms/prompt-lab.js';
 import { messages, chooseLanguage } from '../public/i18n.js';
 import { START, canStand, movePlayer } from '../client/world.js';
+import { EVENT, LOCATIONS, OFFICE_LOCATIONS } from '../public/event-config.js';
 
 // Runs the actual production SQL against SQLite; the adapter only models D1's
 // prepare/bind/batch transport, not game rules.
@@ -170,4 +171,69 @@ test('walking respects walls, furniture, diagonal sliding, and the locked exit',
   const slide=movePlayer({x:5.6,z:2},1,-1);assert.ok(slide.z<2);assert.ok(slide.x<=5.65);
   assert.ok(movePlayer({x:0,z:-5.2},0,-3,false).z>=-5.65);
   assert.ok(movePlayer({x:0,z:-5.2},0,-2,true).z<-7);
+});
+
+test('120 players in 30 teams retain isolated progress and location-filtered, opt-in results',async()=>{
+  const DB=database();
+  const config=JSON.parse(readFileSync(new URL('../wrangler.jsonc',import.meta.url),'utf8'));
+  const counters=new Map();
+  // One simulated minute and one shared office IP. This checks application
+  // headroom against checked-in limits, not Cloudflare's distributed limiter.
+  const limiter=name=>({async limit({key}){
+    const bucket=name+':'+key,count=(counters.get(bucket)||0)+1;
+    counters.set(bucket,count);
+    return {success:count<=config.ratelimits.find(binding=>binding.name===name).simple.limit};
+  }});
+  const raw=client({DB,API_LIMITER:limiter('API_LIMITER'),CREATE_LIMITER:limiter('CREATE_LIMITER')});
+  const api=(path,data,token,headers={})=>raw(path,data,token,{'CF-Connecting-IP':'192.0.2.120',...headers});
+  assert.equal(EVENT.participants,120);
+  assert.equal(OFFICE_LOCATIONS.length,9);
+  assert.equal(new Set(LOCATIONS.map(location=>location.value)).size,LOCATIONS.length);
+  const teams=[];
+  try {
+    for(let i=0;i<30;i++){
+      const location=OFFICE_LOCATIONS[i%OFFICE_LOCATIONS.length].value;
+      const response=await api('/api/sessions',{team:`Event team ${i+1}`,location});
+      assert.equal(response.status,201);assert.equal(response.data.state.location,location);
+      teams.push(response.data);
+    }
+    const players=teams.map(team=>({token:team.token,code:team.state.code}));
+    const joined=await Promise.all(teams.flatMap(team=>Array.from({length:3},()=>api('/api/join',{code:team.state.code,role:'manual'}))));
+    for(const response of joined){assert.equal(response.status,201);players.push({token:response.data.token,code:response.data.state.code});}
+    assert.equal(players.length,120);
+    // Twelve simultaneous polling waves represent one minute at 5s intervals.
+    for(let wave=0;wave<12;wave++){
+      const views=await Promise.all(players.map(player=>api('/api/state',undefined,player.token)));
+      views.forEach((response,i)=>{assert.equal(response.status,200);assert.equal(response.data.code,players[i].code);assert.equal(response.data.players.reduce((sum,role)=>sum+role.count,0),4);});
+    }
+    const first=await api('/api/action',{type:'start',revision:0},teams[0].token);
+    assert.ok(first.data.startedAt);
+    assert.equal((await api('/api/state',undefined,teams[1].token)).data.startedAt,null);
+    await Promise.all(teams.map(async(team,i)=>{
+      let state=i===0?first.data:(await api('/api/action',{type:'start',revision:0},team.token)).data;
+      for(const answer of [{audience:'team',when:'a',where:'atrium',format:'short'},'B',['data','draft','review','send']]){
+        const response=await api('/api/action',{type:'answer',answer,revision:state.revision},team.token);
+        assert.equal(response.status,200);state=response.data;
+      }
+      assert.ok(state.finishedAt);
+      if(i!==29)assert.equal((await api('/api/action',{type:'publish'},team.token)).status,200);
+    }));
+    const board=(await api('/api/leaderboard')).data.entries;
+    assert.equal(board.length,29);assert.ok(board.length>20);
+    assert.ok(!board.some(entry=>entry.team==='Event team 30'));
+    for(const location of OFFICE_LOCATIONS){
+      const response=await api('/api/leaderboard?location='+encodeURIComponent(location.value));
+      assert.equal(response.status,200);
+      assert.equal(response.data.entries.length,board.filter(entry=>entry.location===location.value).length);
+      assert.ok(response.data.entries.every(entry=>entry.location===location.value));
+    }
+    assert.deepEqual((await api('/api/leaderboard?location=Remote')).data.entries,[]);
+    const invalid=await api('/api/leaderboard?location='+encodeURIComponent("Berlin' OR 1=1 --"),undefined,undefined,{'X-Game-Language':'en'});
+    assert.equal(invalid.status,400);assert.equal(invalid.data.error,'Unknown location.');
+    // Visibility expiry works even when no new team has triggered cleanup.
+    DB.sqlite.prepare('UPDATE sessions SET created_at = ? WHERE code = ?').run(Date.now()-31*86400000,teams[0].state.code);
+    assert.equal((await api('/api/leaderboard')).data.entries.length,28);
+    assert.equal(counters.get('CREATE_LIMITER:create:192.0.2.120'),30);
+    assert.ok(counters.get('API_LIMITER:aiescape:192.0.2.120')<3600);
+  }finally{DB.sqlite.close();}
 });

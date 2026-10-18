@@ -1,12 +1,12 @@
 # Architecture
 
-This describes the shipped 0.2.0 prototype. Proposed multi-mission infrastructure is in the [roadmap](roadmap.md).
+This describes the shipped 0.3.0 prototype. Proposed multi-mission infrastructure is in the [roadmap](roadmap.md).
 
 ## Components and build
 
 ```mermaid
 flowchart LR
-    Browser[Browser: public/app.js] -->|JSON API, 3-second polling| Worker[Cloudflare Worker: src/index.js]
+    Browser[Browser: public/app.js] -->|JSON API, 5–6-second polling| Worker[Cloudflare Worker: src/index.js]
     Worker --> DB[(D1: sessions and players)]
     Worker --> Rooms[Server-only room content and validators]
     Browser --> UI[DE/EN UI and optional 2D view]
@@ -26,6 +26,7 @@ The build currently reads a **flat public directory**, accepts `.html`, `.js`, `
 | --- | --- |
 | `public/index.html`, `public/style.css` | Page structure and responsive styling |
 | `public/app.js` | Team flow, forms, polling, role switching and scene integration |
+| `public/event-config.js` | Shared public participant/team defaults, location values/labels and polling interval |
 | `public/i18n.js` | UI dictionary and per-browser language preference |
 | `public/sw.js`, `public/manifest.webmanifest` | PWA shell caching and installation metadata |
 | `client/voxel-room.js` | Geometry, rendering, labels, input, nearby station detection and disposal |
@@ -62,7 +63,7 @@ Creation returns a team code and an individual random player token. The browser 
 
 Progress-changing gameplay writes use `WHERE code = ? AND revision = ?` and increment `revision`. A stale or concurrent submission returns 409 instead of advancing twice. Role changes update a player row; leaderboard publishing is a separate completed-session action and does not use the gameplay revision guard. Do not assume every POST requires the same revision semantics.
 
-The browser polls every three seconds when visible and not busy. Its action epoch prevents an older poll response overwriting a newer action or language switch. Draft form values and the existing scene instance are retained when appropriate. The server remains authoritative for completion and scoring.
+The browser polls every 5–6 seconds (a 5-second base plus per-browser random offset) when visible and not busy. Its action epoch prevents an older poll response overwriting a newer action or language switch. Draft form values and the existing scene instance are retained when appropriate. The server remains authoritative for completion and scoring.
 
 ## Data model
 

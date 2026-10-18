@@ -1,6 +1,6 @@
 # Visual design
 
-The 0.2.2 theme uses a ServiceNow-inspired forest, sage and lime palette with AI Escape's own name, arrow icon and MILO character.
+The 0.3.0 theme uses a ServiceNow-inspired forest, sage and lime palette with AI Escape's own name, arrow icon and MILO character.
 
 ## Palette
 
@@ -22,7 +22,7 @@ Use dark text on lime buttons, light text on forest cards, and muted green text 
 
 `public/lab.svg` is the isometric illustration. `client/voxel-room.js` contains independent material colors for the walkable scene; update those deliberately when changing the palette. The movement/collision model does not need to change for a color-only edit. `public/icon.svg`, the HTML theme color and the PWA manifest also use the forest/lime palette.
 
-In 0.2.2, changed browser assets have explicit `?v=0.2.2` URLs and the service worker uses `aiescape-shell-v4`. Keep HTML, dynamic module imports and the service-worker shell list consistent when changing asset versions. The worker matches assets by pathname. Shell membership also matches by pathname, while cache entries retain their full versioned request URL.
+In 0.3.0, changed browser assets have explicit `?v=0.3.0` URLs and the service worker uses `aiescape-shell-v5`. Keep HTML, dynamic module imports and the service-worker shell list consistent when changing asset versions. The worker matches assets by pathname. Shell membership also matches by pathname, while cache entries retain their full versioned request URL.
 
 ## Review
 

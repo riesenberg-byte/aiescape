@@ -27,13 +27,19 @@ The [documentation index](docs/README.md) links every guide. Technical documenta
 3. Select **Enter the lab** to start the shared timer. Solve three tasks together.
 4. Switch roles to try it solo. Each teammate can select **DE / EN** independently.
 
-Recommended: **2–6 people, 10–15 minutes**. Hints add 60 seconds and mistakes add 15 seconds to the scored time. Publishing a result to the leaderboard is optional.
+For the 120-person team challenge: **20–30 independent teams of 4–6 people, 10–15 minutes per mission**. Two-person teams and solo testing also work. Hints add 60 seconds and mistakes add 15 seconds to the scored time. Publishing a result to the leaderboard is optional.
 
 Select **Explore the 3D lab** on the home page, or use the mission's 3D view. **WASD / arrows** move, **dragging** looks around, **Q / E** turn, **F** interacts, and **Esc** pauses. Touch devices have direction and interaction buttons. The **2D view** supports the same puzzles.
 
+## Run the team challenge
+
+Select **Stuttgart, Berlin, München, Frankfurt, Köln, Düsseldorf, Hamburg, Hannover, or Bukarest**, plus Remote/Other. English labels include Munich, Cologne, Hanover, and Bucharest; stored location values stay the same in both languages. Each team has its own code and shared puzzle state. The leaderboard shows up to 100 voluntarily published teams, with a location filter.
+
+Read the [120-person event guide](docs/team-event.md) for roles, timing, networking assumptions, rehearsal and contributor configuration. Participant numbers are planning defaults, not live registration or a reserved capacity guarantee.
+
 ## Current state and direction
 
-Version **0.2.2** includes one complete mission, the Prompt Lab: precise instructions, source checking, and a safe approval workflow. It has English/German text, asymmetric cooperative views, a walkable voxel room, shared progress, hints, and an optional leaderboard.
+Version **0.3.0** includes one complete mission, the Prompt Lab: precise instructions, source checking, and a safe approval workflow. It has English/German text, asymmetric cooperative views, a walkable voxel room, shared progress, hints, and an optional location-filtered leaderboard. The event setup supports the nine team locations and shared-office network traffic.
 
 The direction is a connected landscape with several missions, meaningful objectives, and areas colleagues can build together. **Mission selection, campaign progression, a data-driven world editor, and shared 3D avatars are planned work**, not existing features. See the [roadmap](docs/roadmap.md) for dependencies and acceptance criteria.
 

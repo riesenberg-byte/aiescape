@@ -8,8 +8,8 @@
 | Worker | `aiescape` |
 | D1 database / binding | `aiescape` / `DB` |
 | Configuration | `wrangler.jsonc` |
-| API limiter | `API_LIMITER`, 600 requests per 60 seconds per configured key/location |
-| Team-creation limiter | `CREATE_LIMITER`, 10 per 60 seconds per configured key/location |
+| API limiter | `API_LIMITER`, 3,600 requests per 60 seconds per configured key/location |
+| Team-creation limiter | `CREATE_LIMITER`, 60 per 60 seconds per configured key/location |
 
 Account/database IDs and domain settings are in the checked-in configuration; these identifiers are not authentication secrets. `workers_dev` is disabled. The custom domain and HTTPS certificate are managed by Cloudflare. The existing release path has used the connected Cloudflare API; Wrangler offers the reproducible CLI path below.
 
@@ -64,10 +64,10 @@ For a failure, capture route, status, deployment/version ID and a reproducible d
 - Stored data: invented team name, selected location, timestamps, stage, hints, mistakes, canonical MILO text, opt-in flag and hashed player tokens. Positions/avatars are not stored.
 - Session access expires **24 hours after creation**, not 24 hours after starting play.
 - Creating a new team triggers deletion of unlisted sessions older than 24 hours and all sessions older than 30 days. This is request-triggered cleanup, not a scheduled deletion guarantee.
-- The current leaderboard query does not itself filter by age; old published entries may remain visible until that cleanup runs. A periodic cleanup job/age filter is future work if precise retention is required.
+- The leaderboard independently excludes sessions created more than 30 days ago. Physical row deletion remains request-triggered; there is no scheduled cleanup guarantee.
 - Published results expose team name, location, hints, mistakes and score. Publishing is explicit; there is currently no self-service unpublish API. A maintainer can handle a removal request using a narrowly identified record.
 - Joined-player counts include inactive devices and are not live presence.
-- Rate limits use the connecting IP as the key, so many colleagues behind one office network share a limit. Test the intended event load before a large session.
+- Rate limits use the connecting IP as a coarse shared budget. The 3,600 API / 60 creation requests per minute allow the planned 30-team launch and up to 120 clients polling every 5–6 seconds behind one office network. Limits are approximate and local to a Cloudflare location; they are not an exact global concurrency quota. See [event load assumptions and rehearsal](team-event.md).
 
 Use fictional names and documents. Keep team codes private while a game is active: anyone with the code can join a role. The leaderboard is a friendly prototype, not a tamper-proof ranking service.
 

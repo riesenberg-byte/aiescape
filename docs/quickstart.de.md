@@ -39,3 +39,7 @@ Am einfachsten ist zunächst ein kleines Objekt, eine verständlichere Rätselhi
 **Live spielen:** [Deutsch](https://aiescape.myapps.fans/?lang=de) · [English](https://aiescape.myapps.fans/?lang=en).
 
 Der eigene Projektcode, die Dokumentation, Beispiele und eigenen Assets stehen unter der [MIT-Lizenz](../LICENSE). Hinweise zu Drittanbieter-Komponenten bleiben in [THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md) erhalten. Ihr könnt euren Fork mit Codex verbinden oder den lokal geklonten Ordner mit Claude Code bearbeiten; der [Beitragsleitfaden](../CONTRIBUTING.md) erklärt den Ablauf.
+
+## Team-Challenge mit rund 120 Personen
+
+Plant 20–30 Teams mit je 4–6 Personen, eigenem Teamcode und mindestens einem Terminal und einem Handbuch. Alle neun Standorte stehen bei der Teamerstellung zur Auswahl. Die Bestenliste zeigt bis zu 100 freiwillig veröffentlichte Teams und kann nach Standort gefiltert werden. Der englische [Event-Leitfaden](team-event.md) beschreibt Ablauf, Konfiguration und die empfohlene Probe vor der Weihnachtsfeier.

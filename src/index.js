@@ -1,6 +1,7 @@
 import { assets } from './generated/assets.js';
 import { room, stageView, miloMessage } from './rooms/prompt-lab.js';
 import { errorsEnglish } from './errors.en.js';
+import { EVENT, isLocation } from '../public/event-config.js';
 
 const SECURITY = {
   'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer',
@@ -65,16 +66,20 @@ async function api(request, env, pathname) {
     await env.DB.prepare('SELECT 1 FROM sessions LIMIT 1').first(); return json({ ok: true, room: room.id });
   }
   if (pathname === '/api/leaderboard' && request.method === 'GET') {
+    const location = new URL(request.url).searchParams.get('location') || '';
+    if (location && !isLocation(location)) fail(400, 'Unbekannter Standort.');
     const rows = await env.DB.prepare(`SELECT team, location, hints, mistakes,
       MAX(0, CAST((finished_at - started_at) / 1000 AS INTEGER)) + hints * 60 + mistakes * 15 AS score
-      FROM sessions WHERE finished_at IS NOT NULL AND listed = 1 ORDER BY score ASC, finished_at ASC LIMIT 20`).all();
+      FROM sessions WHERE finished_at IS NOT NULL AND listed = 1 AND created_at >= ?
+      AND (? = '' OR location = ?) ORDER BY score ASC, finished_at ASC, code ASC LIMIT ?`)
+      .bind(Date.now() - 30 * 86400000, location, location, EVENT.leaderboardLimit).all();
     return json({ entries: rows.results });
   }
   if (pathname === '/api/sessions' && request.method === 'POST') {
     if (env.CREATE_LIMITER && !(await env.CREATE_LIMITER.limit({ key: `create:${ip}` })).success) fail(429, 'Zu viele neue Teams. Bitte in einer Minute erneut versuchen.');
     const data = await body(request);
     const team = clean(data.team); if (team.length < 2) fail(400, 'Euer Teamname braucht mindestens zwei Zeichen.');
-    const location = ['Berlin', 'München', 'Frankfurt', 'Remote', 'Anderer Standort'].includes(data.location) ? data.location : 'Remote';
+    const location = isLocation(data.location) ? data.location : 'Remote';
     const bytes = crypto.getRandomValues(new Uint8Array(8));
     const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
     const code = Array.from(bytes, n => alphabet[n % alphabet.length]).join('');

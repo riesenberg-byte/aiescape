@@ -1,10 +1,11 @@
-import { t, language, setLanguage, translatePage, locationLabel } from './i18n.js?v=0.2.2';
+import { EVENT, LOCATIONS } from './event-config.js?v=0.3.0';
+import { t, language, setLanguage, translatePage, locationLabel } from './i18n.js?v=0.3.0';
 const $ = selector => document.querySelector(selector);
 const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
 const dialog = $('#dialog');
 let token = sessionStorage.getItem('aiescape-token');
 let state = null, busy = false, pollBusy = false, pollTimer, toastTimer, serverOffset = 0;
-let order = [], rendered = '', boardRequest = 0, actionEpoch = 0, modal = null;
+let order = [], rendered = '', boardRequest = 0, actionEpoch = 0, modal = null, boardLocation = '';
 let gameView = null, demoView = null, voxelLoading = false, voxelSnapshot = null;
 let use3d = localStorage.getItem('aiescape-view') !== '2d';
 const time = seconds => `${String(Math.floor(Math.max(0, seconds) / 60)).padStart(2, '0')}:${String(Math.floor(Math.max(0, seconds) % 60)).padStart(2, '0')}`;
@@ -30,11 +31,14 @@ function showDialog(html, type) {
   $('#dialog-content').innerHTML=languageButtons()+html;
   if(!dialog.open)dialog.showModal();
 }
+function locationOptions(selected = '') {
+  return LOCATIONS.map(({value}) => `<option value="${escape(value)}" ${value===selected?'selected':''}>${escape(locationLabel(value))}</option>`).join('');
+}
 function createDialog() {
   showDialog(`<div class="eyebrow">${t('newTeam')}</div><h2>${t('createTitle')}</h2><p>${t('createDescription')}</p>
     <form id="create-form" class="form"><label>${t('teamName')}<input name="team" placeholder="${escape(t('teamPlaceholder'))}" required minlength="2" maxlength="40" autocomplete="off"></label>
-    <label>${t('location')}<select name="location"><option value="Remote">Remote</option><option value="Berlin">Berlin</option><option value="München">${t('munich')}</option><option value="Frankfurt">Frankfurt</option><option value="Anderer Standort">${t('otherLocation')}</option></select></label>
-    <p class="form-note">${t('teamNote')}</p><div class="error" id="form-error" role="alert"></div><button class="button primary" type="submit">${t('createTeam')} ${arrow}</button></form>`, 'create');
+    <label>${t('location')}<select name="location">${locationOptions('Remote')}</select></label>
+    <p class="form-note">${t('eventTeams')}</p><p class="form-note">${t('teamNote')}</p><div class="error" id="form-error" role="alert"></div><button class="button primary" type="submit">${t('createTeam')} ${arrow}</button></form>`, 'create');
 }
 function joinDialog(code='') {
   showDialog(`<div class="eyebrow">${t('joinEyebrow')}</div><h2>${t('joinTitle')}</h2><p>${t('joinDescription')}</p>
@@ -49,17 +53,17 @@ function howDialog() {
 }
 async function leaderboard() {
   const id=++boardRequest;
-  showDialog(`<div class="eyebrow">${t('boardEyebrow')}</div><h2>${t('boardTitle')}</h2><p id="board-content" role="status">${t('boardLoading')}</p>`, 'board');
+  showDialog(`<div class="eyebrow">${t('boardEyebrow')}</div><h2>${t('boardTitle')}</h2><label class="board-filter">${t('boardFilter')}<select id="board-location" class="slot-select"><option value="">${t('allLocations')}</option>${locationOptions(boardLocation)}</select></label><p id="board-content" role="status">${t('boardLoading')}</p>`, 'board');
   try {
-    const {entries}=await request('/api/leaderboard');
-    if(id!==boardRequest||!$('#board-content'))return;
+    const {entries}=await request('/api/leaderboard'+(boardLocation?'?location='+encodeURIComponent(boardLocation):''));
+    if(id!==boardRequest||modal!=='board'||!$('#board-content'))return;
     $('#board-content').outerHTML=entries.length?`<table class="leaderboard"><caption class="visually-hidden">${t('boardCaption')}</caption><thead><tr><th>${t('rank')}</th><th>${t('teamLocation')}</th><th>${t('adjustedTime')}</th></tr></thead><tbody>${entries.map((e,i)=>`<tr><td>${String(i+1).padStart(2,'0')}</td><td>${escape(e.team)}<small>${escape(locationLabel(e.location))}</small></td><td>${time(e.score)}</td></tr>`).join('')}</tbody></table><p class="form-note">${t('boardNote')}</p>`:`<p>${t('boardEmpty')}</p>`;
-  }catch{if($('#board-content'))$('#board-content').textContent=t('boardUnavailable');}
+  }catch{if(id===boardRequest&&modal==='board'&&$('#board-content'))$('#board-content').textContent=t('boardUnavailable');}
 }
 function playerCounts() {return `<span>${t('terminal').toUpperCase()}: ${state.players.find(p=>p.role==='terminal')?.count||0}</span><span>${t('manual').toUpperCase()}: ${state.players.find(p=>p.role==='manual')?.count||0}</span>`;}
 function scene() {
   return `<aside class="game-scene"><div class="scene-heading"><div class="eyebrow">${t(state.finishedAt?'unlockedSector':'lockedSector')}</div><button type="button" class="view-toggle" data-action="view">${t(use3d?'view2d':'view3d')}</button></div>
-    ${use3d?`<div class="voxel-host" id="game-voxel"><p class="voxel-loading">${t('voxelLoading')}</p></div><p class="voxel-note">${t('voxelLocal')}</p>`:`<img src="/lab.svg?v=0.2.2" alt="${escape(t('voxelTitle'))}">`}
+    ${use3d?`<div class="voxel-host" id="game-voxel"><p class="voxel-loading">${t('voxelLoading')}</p></div><p class="voxel-note">${t('voxelLocal')}</p>`:`<img src="/lab.svg?v=0.3.0" alt="${escape(t('voxelTitle'))}">`}
     <div class="milo-bubble" role="status"><span class="milo-mini" aria-hidden="true">• •</span><div><strong>MILO <span>OFFICE OPTIMIZATION AGENT</span></strong><p>${escape(state.message)}</p></div></div>
     <div class="progress-list" aria-label="${t('progress')}">${['precise','sources','responsible'].map((key,i)=>`<div class="progress-item ${i<state.stage?'done':i===state.stage?'current':''}"><span>${i<state.stage?'✓':'0'+(i+1)}</span>${t(key)}</div>`).join('')}</div></aside>`;
 }
@@ -109,7 +113,7 @@ function renderGame(force=false,draft=null){
 }
 async function mountGameView(){
   if(voxelLoading||gameView||!use3d)return;voxelLoading=true;
-  try{const {createVoxelRoom}=await import('./voxel-room.js?v=0.2.2');if(!state||!use3d||!$('#game-voxel'))return;gameView=createVoxelRoom($('#game-voxel'),{t,unlocked:Boolean(state.finishedAt),snapshot:voxelSnapshot,onInteract:interactStation});}
+  try{const {createVoxelRoom}=await import('./voxel-room.js?v=0.3.0');if(!state||!use3d||!$('#game-voxel'))return;gameView=createVoxelRoom($('#game-voxel'),{t,unlocked:Boolean(state.finishedAt),snapshot:voxelSnapshot,onInteract:interactStation});}
   catch{if($('#game-voxel'))$('#game-voxel').innerHTML=`<p class="voxel-fallback">${t('voxelFallback')}</p>`;}
   finally{voxelLoading=false;}
 }
@@ -126,7 +130,7 @@ function interactStation(target){
 async function exploreDialog(){
   showDialog(`<div class="eyebrow">${t('view3d')}</div><h2>${t('voxelTitle')}</h2><p class="form-note">${t('demoNote')}</p><div class="voxel-host" id="demo-voxel"><p class="voxel-loading">${t('voxelLoading')}</p></div>`, 'explore');
   const target=$('#demo-voxel');
-  try{const {createVoxelRoom}=await import('./voxel-room.js?v=0.2.2');if(!target.isConnected||!dialog.open)return;demoView=createVoxelRoom(target,{t,onInteract:interactStation});}
+  try{const {createVoxelRoom}=await import('./voxel-room.js?v=0.3.0');if(!target.isConnected||!dialog.open)return;demoView=createVoxelRoom(target,{t,onInteract:interactStation});}
   catch{if(target.isConnected)target.innerHTML=`<p class="voxel-fallback">${t('voxelFallback')}</p>`;}
 }
 function updateTimer(){if(!state||!$('#timer'))return;$('#timer').textContent=state.startedAt?time(((state.finishedAt||Date.now()+serverOffset)-state.startedAt)/1000):'00:00';}
@@ -136,7 +140,7 @@ async function poll(){
   catch(error){if(epoch!==actionEpoch)return;if([401,410].includes(error.status)){leave();toast(error.message);}else if($('#connection-status')){$('#connection-status').textContent=t('disconnected');$('#connection-status').classList.add('offline');}}
   finally{pollBusy=false;}
 }
-function begin(result){actionEpoch++;token=result.token;sessionStorage.setItem('aiescape-token',token);state=result.state;rendered='';dialog.close();renderGame();clearInterval(pollTimer);pollTimer=setInterval(poll,3000);$('#game').scrollIntoView({behavior:'instant'});}
+function begin(result){actionEpoch++;token=result.token;sessionStorage.setItem('aiescape-token',token);state=result.state;rendered='';dialog.close();renderGame();clearInterval(pollTimer);pollTimer=setInterval(poll,EVENT.pollIntervalMs+Math.floor(Math.random()*1000));$('#game').scrollIntoView({behavior:'instant'});}
 async function action(data){
   if(busy)return;actionEpoch++;busy=true;gameView?.pause();
   const draft=captureDraft();
@@ -172,6 +176,7 @@ async function changeLanguage(next){
 }
 dialog.addEventListener('close',()=>{demoView?.dispose();demoView=null;modal=null;});
 document.addEventListener('voxel-failed',()=>{gameView?.dispose();gameView=null;use3d=false;if(state)renderGame(true);toast(t('voxelFallback'));});
+document.addEventListener('change',event=>{if(event.target.id==='board-location'){boardLocation=event.target.value;void leaderboard();}});
 document.addEventListener('click',async event=>{
   const lang=event.target.closest('[data-language]');if(lang){await changeLanguage(lang.dataset.language);return;}
   const role=event.target.closest('[data-role]');if(role&&state){if(role.dataset.role!==state.role)await action({type:'role',role:role.dataset.role});return;}
@@ -203,5 +208,5 @@ window.addEventListener('online',()=>void poll());
 setInterval(updateTimer,1000);
 const params=new URLSearchParams(location.search),joinCode=params.get('join');
 if(joinCode){history.replaceState(null,'',`${location.pathname}?lang=${language}`);if(token){token=null;sessionStorage.removeItem('aiescape-token');}joinDialog(joinCode);}
-else if(token){void(async()=>{try{const current=await request('/api/state');begin({token,state:current});}catch(error){if([401,410].includes(error.status)){leave();toast(error.message);}else{toast(t('restore'));pollTimer=setInterval(poll,3000);}}})();}
+else if(token){void(async()=>{try{const current=await request('/api/state');begin({token,state:current});}catch(error){if([401,410].includes(error.status)){leave();toast(error.message);}else{toast(t('restore'));pollTimer=setInterval(poll,EVENT.pollIntervalMs+Math.floor(Math.random()*1000));}}})();}
 if('serviceWorker'in navigator)void navigator.serviceWorker.register('/sw.js').catch(()=>{});

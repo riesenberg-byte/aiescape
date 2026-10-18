@@ -1,4 +1,5 @@
 export const errorsEnglish = {
+  'Unbekannter Standort.': 'Unknown location.',
   'Bitte JSON senden.': 'Please send JSON.',
   'Die Eingabe fehlt.': 'The input is missing.',
   'Die Eingabe ist zu groß.': 'The input is too large.',

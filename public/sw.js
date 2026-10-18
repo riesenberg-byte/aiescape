@@ -1,5 +1,5 @@
-const CACHE = 'aiescape-shell-v4';
-const SHELL = ['/', '/style.css?v=0.2.2', '/fonts.css', '/app.js?v=0.2.2', '/i18n.js?v=0.2.2', '/voxel-room.js?v=0.2.2', '/lab.svg?v=0.2.2', '/icon.svg?v=0.2.2', '/manifest.webmanifest'];
+const CACHE = 'aiescape-shell-v5';
+const SHELL = ['/', '/style.css?v=0.3.0', '/fonts.css', '/app.js?v=0.3.0', '/i18n.js?v=0.3.0', '/event-config.js?v=0.3.0', '/voxel-room.js?v=0.3.0', '/lab.svg?v=0.3.0', '/icon.svg?v=0.3.0', '/manifest.webmanifest'];
 self.addEventListener('install', event => { event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(SHELL))); });
 self.addEventListener('activate', event => { event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k.startsWith('aiescape-shell-') && k !== CACHE).map(k => caches.delete(k))))); });
 self.addEventListener('fetch', event => {

@@ -41,3 +41,7 @@ dialog{background:#f7faf3;border-color:#bfd1bc;border-radius:20px;box-shadow:0 3
 .header :focus-visible,.hero :focus-visible{outline-color:var(--lime)}
 
 .room-tag{color:var(--forest)}.room-card-top{font-size:8px}@media(max-width:450px){.room-card-top{font-size:7px}}
+
+/* Team event: readable at a table, on a phone, or in a remote call. */
+.event-section{margin:0 6% 36px;padding:34px;display:grid;grid-template-columns:1fr 1fr;gap:40px;background:#e9f0e4;border:1px solid var(--line);border-radius:18px}.event-section h2{font-size:34px;line-height:1.15;margin:14px 0}.event-section p{font-size:13px;line-height:1.8;color:#405f51}.event-section .button{margin-top:8px}.event-facts{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}.event-facts span,.office-list li{font:10px/1.5 var(--mono);border:1px solid #b9ccbb;padding:7px 10px;border-radius:7px;background:#f5f8f2}.office-list{display:flex;list-style:none;padding:0;gap:7px;flex-wrap:wrap;margin:20px 0 0}.office-list li{color:var(--forest)}.board-filter{display:grid;gap:8px;font:10px/1.5 var(--mono);margin:20px 0}.leaderboard{width:100%}.leaderboard td{overflow-wrap:anywhere}.board-filter select{width:100%}
+@media(max-width:800px){.event-section{margin-inline:5%;padding:24px;grid-template-columns:1fr;gap:16px}.event-section h2{font-size:30px}}@media(max-width:450px){.event-section{padding:20px}.event-section h2{font-size:27px}.event-facts{gap:6px}.event-facts span{font-size:9px}}

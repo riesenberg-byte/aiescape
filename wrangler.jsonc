@@ -14,6 +14,6 @@
     "database_id": "8aacd6e5-1f06-43ef-8cac-0b4355ec3bae",
     "migrations_dir": "migrations"
   }],
-  "ratelimits": [{ "name": "API_LIMITER", "namespace_id": "1423526300", "simple": { "limit": 600, "period": 60 } },
-    { "name": "CREATE_LIMITER", "namespace_id": "1423526301", "simple": { "limit": 10, "period": 60 } }]
+  "ratelimits": [{ "name": "API_LIMITER", "namespace_id": "1423526300", "simple": { "limit": 3600, "period": 60 } },
+    { "name": "CREATE_LIMITER", "namespace_id": "1423526301", "simple": { "limit": 60, "period": 60 } }]
 }

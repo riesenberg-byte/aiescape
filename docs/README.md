@@ -1,11 +1,12 @@
 # Documentation
 
-These guides describe **AI Escape 0.2.2**. The main technical guides are in English for cross-location collaboration. [Deutscher Schnelleinstieg](quickstart.de.md).
+These guides describe **AI Escape 0.3.0**. The main technical guides are in English for cross-location collaboration. [Deutscher Schnelleinstieg](quickstart.de.md).
 
 | Guide | Purpose |
 | --- | --- |
 | [Getting started](getting-started.md) | Requirements, local run modes, commands, troubleshooting |
 | [Contributing](../CONTRIBUTING.md) | Joining the project, choosing work, branches and pull requests |
+| [120-person team event](team-event.md) | Team setup, locations, event runbook and load assumptions |
 | [Game design](game-design.md) | Story, cooperative puzzle rules, mission/objective vocabulary |
 | [Architecture](architecture.md) | Code map, build, session state, rendering and boundaries |
 | [API reference](api.md) | Requests, responses, actions and failure handling |

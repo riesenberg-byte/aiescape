@@ -10,7 +10,7 @@ npm run build
 npm test
 ```
 
-`npm test` runs `tests/game.test.mjs` with Node's built-in test runner and SQLite. The eight current tests cover:
+`npm test` runs `tests/game.test.mjs` with Node's built-in test runner and SQLite. The nine current tests cover:
 
 1. A full team flow, shared completion and explicit leaderboard opt-in.
 2. Roles, validation, foreign origins and session expiry.
@@ -20,6 +20,7 @@ npm test
 6. English/German teammates sharing progress and translated MILO messages.
 7. Language selection, dictionary entries and stable option IDs.
 8. Walking boundaries, furniture, sliding and locked/unlocked exits.
+9. 120 players in 30 teams, twelve polling waves behind a simulated shared office IP, isolated progress, all nine locations, full completion, more than 20 opt-in results, location filters, invalid filters and visibility expiry.
 
 The SQLite adapter exercises production SQL and the Worker handler, but does not reproduce the complete Cloudflare runtime or a browser renderer. Passing tests does not prove touch input, WebGL, caches or visual layout are correct.
 
@@ -55,6 +56,8 @@ The following are a repeatable checklist. An automated browser runner is not cur
 6. Verify the team is absent from the leaderboard until publication is explicitly selected. Use invented names only.
 7. Reload during play and after completion; the same browser should restore its session while the token is retained.
 8. Temporarily interrupt the connection. State should recover when it returns. After an uncertain action, refresh state instead of assuming it failed.
+
+For the team event, verify all nine locations in DE/EN, preserved location selection on language change, empty/non-empty leaderboard filters, and the [event rehearsal](team-event.md). The 120-player test uses local SQLite and simulated limit counters; it is not a production Cloudflare load test.
 
 For 3D, also check:
 

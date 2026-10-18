@@ -1,5 +1,17 @@
+import { EVENT, LOCATIONS, OFFICE_LOCATIONS } from './event-config.js?v=0.3.0';
 // UI strings use stable keys. User-provided team names are never translated.
 export const messages = {
+  eventEyebrow: ['DIE TEAM-CHALLENGE', 'THE TEAM CHALLENGE'],
+  eventTitle: ['Viele Standorte. Ein gemeinsamer Ausbruch.', 'Many locations. One shared escape.'],
+  eventDescription: ['Plant eure Challenge für rund {participants} Kolleginnen und Kollegen an {offices} Standorten. Spielt gleichzeitig in kleinen Teams – vor Ort oder im Call.', 'Plan your challenge for around {participants} colleagues across {offices} locations. Play at the same time in small teams, in the office or on a call.'],
+  eventTeams: ['Für {participants} Personen: {teamsMin}–{teamsMax} Teams mit je {teamMin}–{teamMax} Personen. Jedes Team erstellt seinen eigenen Code und wählt seinen Standort.', 'For {participants} people: {teamsMin}–{teamsMax} teams of {teamMin}–{teamMax}. Each team creates its own code and selects its location.'],
+  eventRoles: ['Pro Team: ein Terminal und mindestens ein Handbuch. Teilt euch die Rollen und wechselt die Steuerung zwischen den Rätseln.', 'Per team: one terminal and at least one handbook. Split the roles and take turns at the controls between puzzles.'],
+  eventScoring: ['Gemeinsam starten, im eigenen Tempo rätseln. Am Ende könnt ihr euer Ergebnis freiwillig veröffentlichen und die Rangliste nach Standort filtern.', 'Start together and solve at your own pace. At the end, optionally publish your result and filter the leaderboard by location.'],
+  eventPeople: ['{participants} Personen geplant', '{participants} people planned'],
+  eventTeamCount: ['{teamsMin}–{teamsMax} Teams', '{teamsMin}–{teamsMax} teams'],
+  eventOffices: ['{offices} Standorte', '{offices} locations'],
+  boardFilter: ['STANDORT FILTERN', 'FILTER BY LOCATION'],
+  allLocations: ['Alle Standorte', 'All locations'],
   skip: ['Zum Inhalt', 'Skip to content'],
   home: ['AI Escape Startseite', 'AI Escape home'],
   nav: ['Hauptnavigation', 'Main navigation'],
@@ -40,7 +52,7 @@ export const messages = {
   createDescription: ['Gründet euer Team. Danach bekommt ihr einen Code für die anderen Geräte.', 'Create your team to get a code for the other devices.'],
   teamName: ['EUER TEAMNAME', 'YOUR TEAM NAME'], teamPlaceholder: ['Zum Beispiel: Die Prompt-Piraten', 'For example: The Prompt Pirates'],
   location: ['EUER STANDORT', 'YOUR LOCATION'], munich: ['München', 'Munich'], otherLocation: ['Anderer Standort', 'Other location'],
-  teamNote: ['2–6 Personen empfohlen. Zum Testen geht es auch allein mit Rollenwechsel. Nutzt einen Fantasienamen, keine echten Namen oder Kundendaten. Spielstände laufen nach 24 Stunden ab.', 'Recommended for 2–6 people. You can also try it solo by switching roles. Use a made-up team name, not real names or client data. Sessions expire after 24 hours.'],
+  teamNote: ['Für die Team-Challenge 4–6 Personen empfohlen. Zu zweit geht es auch. Zum Testen geht es auch allein mit Rollenwechsel. Nutzt einen Fantasienamen, keine echten Namen oder Kundendaten. Spielstände laufen nach 24 Stunden ab.', 'Recommended for 4–6 people for the team challenge. Two can play too. You can also try it solo by switching roles. Use a made-up team name, not real names or client data. Sessions expire after 24 hours.'],
   joinEyebrow: ['MISSION 001 / TEAM BEITRETEN', 'MISSION 001 / JOIN A TEAM'],
   joinTitle: ['Gleiche Mission.<br>Andere Perspektive.', 'Same mission.<br>Different perspective.'],
   joinDescription: ['Der Teamcode steht auf dem Terminal eures Teams.', 'Your team code is shown on your team’s terminal.'],
@@ -125,12 +137,15 @@ export function setLanguage(value) {
   try { localStorage.setItem('aiescape-language', language); } catch {}
 }
 export function t(key, values = {}) {
+  values = { ...EVENT, offices: OFFICE_LOCATIONS.length, teamsMin: Math.ceil(EVENT.participants / EVENT.teamMax), teamsMax: Math.ceil(EVENT.participants / EVENT.teamMin), ...values };
   const pair = messages[key];
   if (!pair) throw new Error(`Missing translation: ${key}`);
   return pair[language === 'en' ? 1 : 0].replace(/\{(\w+)\}/g, (_, name) => String(values[name] ?? `{${name}}`));
 }
-export function locationLabel(value) { return value === 'München' ? t('munich') : value === 'Anderer Standort' ? t('otherLocation') : value; }
+export function locationLabel(value) { const location = LOCATIONS.find(item => item.value === value); return location ? location[language] : value; }
 export function translatePage() {
+  const offices = document.querySelector('#office-list');
+  if (offices) { offices.replaceChildren(...OFFICE_LOCATIONS.map(location => { const item = document.createElement('li'); item.textContent = location[language]; return item; })); }
   document.documentElement.lang = language;
   document.title = language === 'en' ? 'AI Escape — Outsmart the system. Together.' : 'AI Escape — Überlistet das System. Gemeinsam.';
   document.querySelector('link[rel="manifest"]').href = `/manifest.webmanifest?lang=${language}`;
