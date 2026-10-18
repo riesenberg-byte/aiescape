@@ -2,7 +2,7 @@
 
 ## Requirements
 
-- Git and access to the private GitHub repository.
+- Git. For external contributions, create a GitHub account and fork the repository; no collaborator invitation is needed for a public repository.
 - Node.js **24 or newer**, including `node:sqlite`, and npm.
 - A recent browser. WebGL is needed for 3D; the puzzles also work in 2D.
 

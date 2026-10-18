@@ -6,7 +6,7 @@ Die Idee: Wir entwickeln zusammen eine spannende, begehbare Landschaft mit mehre
 
 ## Lokal starten
 
-Voraussetzungen: Git, Node.js ab Version 24 und npm. Für das private Repository braucht ihr eine GitHub-Einladung vom Repository-Inhaber. Cloudflare-Zugriff ist für den lokalen QA-Server nicht nötig.
+Voraussetzungen: Git, Node.js ab Version 24 und npm. Externe Mitwirkende können das Repository auf GitHub forken und Änderungen als Pull Request einreichen. Cloudflare-Zugriff ist für den lokalen QA-Server nicht nötig.
 
 ```sh
 git clone https://github.com/riesenberg-byte/aiescape.git
@@ -37,3 +37,5 @@ node scripts/dev-server.mjs
 Am einfachsten ist zunächst ein kleines Objekt, eine verständlichere Rätselhilfe oder ein Missionsentwurf. Weitere spielbare Missionen brauchen derzeit noch Änderungen an der Engine. Das Beispielmodul wird deshalb bewusst als Vorlage geführt und nicht automatisch ins Live-Spiel aufgenommen.
 
 **Live spielen:** [Deutsch](https://aiescape.myapps.fans/?lang=de) · [English](https://aiescape.myapps.fans/?lang=en).
+
+Der eigene Projektcode, die Dokumentation, Beispiele und eigenen Assets stehen unter der [MIT-Lizenz](../LICENSE). Hinweise zu Drittanbieter-Komponenten bleiben in [THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md) erhalten. Ihr könnt euren Fork mit Codex verbinden oder den lokal geklonten Ordner mit Claude Code bearbeiten; der [Beitragsleitfaden](../CONTRIBUTING.md) erklärt den Ablauf.

@@ -72,3 +72,9 @@ docs/                    Contributor and maintainer guides
 The application runs on **Cloudflare Workers + D1** at [aiescape.myapps.fans](https://aiescape.myapps.fans). three.js is bundled locally; there are no runtime CDN or font dependencies. Publishing GitHub source does not automatically deploy the application. See [operations](docs/operations.md) for the release process, data lifecycle, and access requirements.
 
 Ready to help? Pick a small idea from the [roadmap](docs/roadmap.md), open an issue using a template, and follow [CONTRIBUTING.md](CONTRIBUTING.md). Puzzle writing, translation, art, accessibility, and playtesting are as welcome as code.
+
+## License and external contributions
+
+Original project code, documentation, examples and original assets are available under the [MIT License](LICENSE). Third-party components retain their own licenses; see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
+External contributors are welcome: fork the repository, build a small improvement in a branch, and open a pull request. You can work with Codex or Claude Code using your own fork. The [contribution guide](CONTRIBUTING.md) explains setup, review and contribution licensing.

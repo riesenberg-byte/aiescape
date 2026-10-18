@@ -4,7 +4,7 @@ Welcome! The aim is a fun cooperative world that colleagues can build together, 
 
 ## Join and choose a task
 
-The repository is currently private. The repository owner can invite colleagues as GitHub collaborators. An invitation gives repository access; local development itself needs no Cloudflare production access.
+Contributions from colleagues and the wider community are welcome. For external contributions, fork the repository and open a pull request from a branch in your fork. Maintainers can grant direct collaborator access when needed; public read access does not grant write or Cloudflare deployment permissions. Local development needs no production access.
 
 1. Read the [README](README.md), [game design](docs/game-design.md), and [current roadmap](docs/roadmap.md).
 2. Search existing issues and pull requests for related work. The roadmap is a list of proposals, not a promise that somebody has already taken them.
@@ -15,6 +15,19 @@ The repository is currently private. The repository owner can invite colleagues 
 Good first contributions include a clearer clue in both languages, a playtest report, a decorative block object with no new mechanics, a touch-control improvement, or a draft mission in `examples/missions/`. Adding another playable mission currently also needs engine work; see [mission authoring](docs/mission-authoring.md).
 
 ## Work in a branch
+
+If you are an external contributor, first use GitHub's **Fork** button. Replace `YOUR-USERNAME` below with your GitHub username:
+
+```sh
+git clone https://github.com/YOUR-USERNAME/aiescape.git
+cd aiescape
+git remote add upstream https://github.com/riesenberg-byte/aiescape.git
+git switch -c feat/your-short-description
+```
+
+Push to your fork with `git push -u origin feat/your-short-description`, then open a pull request into `riesenberg-byte/aiescape:main`. Refresh your fork from upstream before starting subsequent work.
+
+Direct collaborators working in the original repository can use:
 
 ```sh
 git switch main
@@ -45,6 +58,14 @@ Commit the source, relevant documentation, and `package-lock.json` when dependen
 5. Request maintainer review. A maintainer decides when to merge and release. There is currently no automated deployment or required-check enforcement configured by this project.
 
 For large shared-file changes, open a draft PR early. If `main` moves, update your branch and resolve conflicts in your own changes. Never force-push `main`. If rewriting your own branch is necessary, coordinate with anyone sharing it and use `--force-with-lease`.
+
+## Using Codex or Claude Code
+
+Open your fork as a project in Codex with its GitHub connection, or clone it locally and open the repository directory in Claude Code. Ask the agent to read this guide and the relevant documentation before editing. Give it one bounded task, work in a branch, review the diff, and run the checks before opening a PR. Pushing changes requires GitHub credentials with access to your fork; reading a public repository alone does not provide that access.
+
+## License for contributions
+
+Original project work is licensed under the [MIT License](LICENSE). By submitting a contribution, you agree that your original contribution is provided under that license. Include appropriate attribution and retain the original license for third-party work; see [third-party notices](THIRD_PARTY_NOTICES.md). Do not submit work you do not have the right to contribute.
 
 ## Definition of done
 
