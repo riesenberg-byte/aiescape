@@ -2,7 +2,7 @@
 
 ## Direction
 
-AI Escape should be an enjoyable team adventure that happens to teach useful AI habits. NOVA is earnest, literal, and occasionally absurd. Its journey is from over-optimising colleague to helpful collaborator. Humor should come from office situations and ambiguous instructions, not from frightening players or mocking a colleague's technical knowledge.
+AI Escape should be an enjoyable team adventure that happens to teach useful AI habits. MILO is earnest, literal, and occasionally absurd. Its journey is from over-optimising colleague to helpful collaborator. Humor should come from office situations and ambiguous instructions, not from frightening players or mocking a colleague's technical knowledge.
 
 The larger vision is an office campus or landscape that teams explore together: a hub, recognisable destinations, several missions, and a visible shared goal. The first playable slice is deliberately small: one lab, three tasks, two information roles.
 
@@ -35,7 +35,7 @@ Keep physical areas and mission logic separate in new designs: several missions 
 Use the GitHub **Mission proposal** form and include:
 
 - Working title, stable candidate ID, area, player count and expected duration.
-- Opening situation and NOVA's amusing misunderstanding.
+- Opening situation and MILO's amusing misunderstanding.
 - One sentence describing the final player objective.
 - Stage sequence: action, terminal information, handbook information, solution rationale, and observable result.
 - Two hints per stage, wrong-answer behavior, and how a team recovers.
@@ -53,8 +53,8 @@ Use the GitHub **Mission proposal** form and include:
 | Hallucination Archive | Verify the event information | One side sees claims, the other sees source records |
 | Engine Room | Restore a safe automation workflow | One side arranges blocks, the other has system constraints |
 | Governance Vault | Obtain the right approval | Team combines scenario facts and permission rules |
-| Data Basement | Repair the data feeding NOVA | Team reconciles inconsistent records and definitions |
-| Celebration hub | Combine completed objectives | NOVA joins the party after the team's collective work |
+| Data Basement | Repair the data feeding MILO | Team reconciles inconsistent records and definitions |
+| Celebration hub | Combine completed objectives | MILO joins the party after the team's collective work |
 
 These are design prompts, not scheduled releases. The lab already includes source-checking and approval tasks; new missions should add a distinct mechanic or scenario rather than repeat the same multiple-choice questions.
 

@@ -4,7 +4,7 @@ export const english = {
   stages: [
     {
       title: 'One task. So many misunderstandings.', label: 'Give clear instructions',
-      task: 'NOVA needs to write the office party invitation. Build an unambiguous instruction from four building blocks. Your handbook has the event team’s confirmed details.',
+      task: 'MILO needs to write the office party invitation. Build an unambiguous instruction from four building blocks. Your handbook has the event team’s confirmed details.',
       slots: [
         { id: 'audience', label: 'Who is it for?', options: [['clients', 'Our clients'], ['team', 'All employees'], ['board', 'The executive team']] },
         { id: 'when', label: 'When?', options: [['a', '18 December · 17:30'], ['b', '19 December · 18:00'], ['c', '18 December · 09:00']] },
@@ -22,7 +22,7 @@ export const english = {
     },
     {
       title: 'Confident does not mean verified.', label: 'Check the sources',
-      task: 'NOVA has written three statements about the party. One is not supported by a source. Which one will you remove? Only the handbook has the original sources.',
+      task: 'MILO has written three statements about the party. One is not supported by a source. Which one will you remove? Only the handbook has the original sources.',
       choices: [
         ['A', 'The party starts on 18 December at 17:30 in the atrium.', 'Source: Calendar / FINAL'],
         ['B', 'Everyone will receive a travel voucher worth 500 euros.', 'Source: Benefits policy / Section 8.4'],
@@ -39,12 +39,12 @@ export const english = {
     },
     {
       title: 'Think first. Automate second.', label: 'Act responsibly',
-      task: 'The last lock: NOVA wants to send the invitation immediately. Put these four steps in a safe order. Your handbook explains the dependencies.',
+      task: 'The last lock: MILO wants to send the invitation immediately. Put these four steps in a safe order. Your handbook explains the dependencies.',
       choices: [['send', 'Send the invitation'], ['review', 'Get the event team’s approval of the draft'], ['draft', 'Create an invitation draft'], ['data', 'Check the details and sources']],
       manual: [
         ['OPERATING RULE / 01', 'Before a draft is created, the underlying details and sources must be checked.'],
         ['OPERATING RULE / 02', 'The event team reviews the completed draft. Approval cannot happen before the draft exists.'],
-        ['OPERATING RULE / 03', 'An external action, such as sending the invitation, requires human approval first. NOVA should assist rather than send things on its own.']
+        ['OPERATING RULE / 03', 'An external action, such as sending the invitation, requires human approval first. MILO should assist rather than send things on its own.']
       ],
       hints: ['Look at the dependencies: what must already be done before each step?', 'Sources first, sending last. Drafting and human approval go in between.'],
       success: 'Door unlocked. I have learned that teamwork is not inefficient parallel processing. May I come to the party?',

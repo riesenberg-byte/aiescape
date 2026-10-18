@@ -1,6 +1,6 @@
 # Documentation
 
-These guides describe **AI Escape 0.2.1**. The main technical guides are in English for cross-location collaboration. [Deutscher Schnelleinstieg](quickstart.de.md).
+These guides describe **AI Escape 0.2.2**. The main technical guides are in English for cross-location collaboration. [Deutscher Schnelleinstieg](quickstart.de.md).
 
 | Guide | Purpose |
 | --- | --- |

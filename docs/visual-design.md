@@ -1,13 +1,13 @@
 # Visual design
 
-The 0.2.1 theme uses a ServiceNow-inspired forest, sage and lime palette with AI Escape's own name, arrow icon and NOVA character.
+The 0.2.2 theme uses a ServiceNow-inspired forest, sage and lime palette with AI Escape's own name, arrow icon and MILO character.
 
 ## Palette
 
 | Token | Value | Role |
 | --- | --- | --- |
 | `--forest-deep` | `#0e2d2b` | Hero, header, high-contrast dark surfaces |
-| `--forest` | `#153f3b` | Mission cards, status panels and NOVA bubbles |
+| `--forest` | `#153f3b` | Mission cards, status panels and MILO bubbles |
 | `--sage` | `#81b5a1` | Supporting details, robot body and subtle boundaries |
 | `--lime` / `--acid` | `#d1f55e` | Primary actions, hero emphasis and completion accents |
 | `--paper` | `#f5f8f2` | Main page background |
@@ -22,7 +22,7 @@ Use dark text on lime buttons, light text on forest cards, and muted green text 
 
 `public/lab.svg` is the isometric illustration. `client/voxel-room.js` contains independent material colors for the walkable scene; update those deliberately when changing the palette. The movement/collision model does not need to change for a color-only edit. `public/icon.svg`, the HTML theme color and the PWA manifest also use the forest/lime palette.
 
-In 0.2.1, changed browser assets have explicit `?v=0.2.1` URLs and the service worker uses `aiescape-shell-v3`. Keep HTML, dynamic module imports and the service-worker shell list consistent when changing asset versions. The worker matches assets by pathname. Shell membership also matches by pathname, while cache entries retain their full versioned request URL.
+In 0.2.2, changed browser assets have explicit `?v=0.2.2` URLs and the service worker uses `aiescape-shell-v4`. Keep HTML, dynamic module imports and the service-worker shell list consistent when changing asset versions. The worker matches assets by pathname. Shell membership also matches by pathname, while cache entries retain their full versioned request URL.
 
 ## Review
 

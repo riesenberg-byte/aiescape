@@ -16,7 +16,7 @@ export const errorsEnglish = {
   'Nicht gefunden.': 'Not found.',
   'Unbekannte Rolle.': 'Unknown role.',
   'Schließt zuerst die Mission ab.': 'Complete the mission first.',
-  'Nur das Terminal kann NOVA Befehle geben. Teilt eure Hinweise im Gespräch.': 'Only the terminal can give NOVA instructions. Share your clues by talking to your team.',
+  'Nur das Terminal kann MILO Befehle geben. Teilt eure Hinweise im Gespräch.': 'Only the terminal can give MILO instructions. Share your clues by talking to your team.',
   'Euer Team war schneller. Der Spielstand wird aktualisiert.': 'Your team was faster. Refreshing the game state.',
   'Die Mission ist bereits abgeschlossen.': 'The mission is already complete.',
   'Die Mission läuft bereits.': 'The mission has already started.',
@@ -24,5 +24,5 @@ export const errorsEnglish = {
   'Alle Hinweise für diesen Schritt sind bereits sichtbar.': 'All hints for this step are already visible.',
   'Unbekannte Aktion.': 'Unknown action.',
   'Der Spielstand hat sich geändert. Bitte erneut versuchen.': 'The game state has changed. Please try again.',
-  'NOVA hat sich verheddert. Bitte gleich erneut versuchen.': 'NOVA got a little tangled up. Please try again in a moment.'
+  'MILO hat sich verheddert. Bitte gleich erneut versuchen.': 'MILO got a little tangled up. Please try again in a moment.'
 };

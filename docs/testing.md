@@ -17,7 +17,7 @@ npm test
 3. Bounded hints and concurrent submissions using the same revision.
 4. Public assets, security headers and role projections.
 5. Rate-limit rejection before database access.
-6. English/German teammates sharing progress and translated NOVA messages.
+6. English/German teammates sharing progress and translated MILO messages.
 7. Language selection, dictionary entries and stable option IDs.
 8. Walking boundaries, furniture, sliding and locked/unlocked exits.
 
@@ -51,7 +51,7 @@ The following are a repeatable checklist. An automated browser runner is not cur
 2. Create an English terminal team; join its code from a German handbook. Confirm different information appears in each role.
 3. Start the mission, make one incorrect attempt, and request a hint. Verify the stage does not advance incorrectly and the hint penalty appears in the final score.
 4. Partly fill a form, switch DE/EN, and verify values, role, timer and stage are retained. Repeat on the ordering puzzle.
-5. Complete all stages. Confirm both clients receive completion and NOVA's message in their own language.
+5. Complete all stages. Confirm both clients receive completion and MILO's message in their own language.
 6. Verify the team is absent from the leaderboard until publication is explicitly selected. Use invented names only.
 7. Reload during play and after completion; the same browser should restore its session while the token is retained.
 8. Temporarily interrupt the connection. State should recover when it returns. After an uncertain action, refresh state instead of assuming it failed.
@@ -59,7 +59,7 @@ The following are a repeatable checklist. An automated browser runner is not cur
 For 3D, also check:
 
 - Enter the demo and mission scenes; click **Explore**, walk with WASD/arrows, drag to look, turn with Q/E, pause with Esc, and reset to the entrance.
-- Walk diagonally against walls, desks, chairs and NOVA. No tunnelling or trapped spawn.
+- Walk diagonally against walls, desks, chairs and MILO. No tunnelling or trapped spawn.
 - Approach each station and use F/the interaction button. A handbook must not gain answer privileges by walking to the terminal.
 - Finish the mission and walk through the opened exit. The door remains locked before server completion.
 - Switch language/view and request a hint without losing camera position or creating duplicate controls.

@@ -23,7 +23,7 @@ Invitation links include the current player's language parameter. An invitee can
 | Canonical German mission content and validators | `src/rooms/prompt-lab.js` |
 | English mission copy | `src/rooms/prompt-lab.en.js` |
 | English server errors | `src/errors.en.js` |
-| NOVA's stored-message translation | `novaMessage()` in the active room module |
+| MILO's stored-message translation | `miloMessage()` in the active room module |
 | English installation manifest | `src/index.js` response for `/manifest.webmanifest?lang=en` |
 
 UI dictionary entries are `[German, English]` pairs with stable keys:
@@ -41,7 +41,7 @@ yourKey: ['Dein Text', 'Your text']
 
 Match stage counts and option sets exactly. Labels may change, but a choice ID such as `team`, `B`, or `review` must mean the same thing in both languages. Validators run against these IDs, not visible text. Both versions need the same information and equally useful hints; literal translation is less important than equivalent puzzle difficulty.
 
-NOVA messages are currently stored as German strings and translated by matching those strings. If you edit canonical success/failure copy, consider sessions that already hold the old text. Stable message IDs and mission versions are planned improvements, not current infrastructure.
+MILO messages are currently stored as German strings and translated by matching those strings. If you edit canonical success/failure copy, consider sessions that already hold the old text. Stable message IDs and mission versions are planned improvements, not current infrastructure.
 
 ## Review checklist
 

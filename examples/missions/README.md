@@ -11,7 +11,7 @@ From the repository root, with Node.js 24+:
 ```sh
 node --input-type=module <<'JS'
 import assert from 'node:assert/strict';
-import { room, stageView, novaMessage } from './examples/missions/coffee-break.js';
+import { room, stageView, miloMessage } from './examples/missions/coffee-break.js';
 
 const answers = [{ audience: 'team', duration: 'ten' }, 'B', ['check', 'draft', 'approve']];
 room.stages.forEach((stage, index) => {
@@ -23,7 +23,7 @@ room.stages.forEach((stage, index) => {
   assert.equal(handbook.choices, undefined);
   assert.ok(handbook.manual.length > 0);
   assert.equal(terminal.validate, undefined);
-  assert.notEqual(novaMessage(stage.success, 'en'), stage.success);
+  assert.notEqual(miloMessage(stage.success, 'en'), stage.success);
   console.log(`${index + 1}. ${terminal.title}`);
 });
 JS

@@ -5,7 +5,7 @@ export const room = {
   stages: [
     {
       title: 'Ein Auftrag. Viele Missverständnisse.', label: 'Präzise formulieren',
-      task: 'NOVA soll die Einladung zur Office-Feier schreiben. Baue einen eindeutigen Auftrag aus vier Bausteinen. Das Orga-Team hat die richtigen Angaben im Handbuch.',
+      task: 'MILO soll die Einladung zur Office-Feier schreiben. Baue einen eindeutigen Auftrag aus vier Bausteinen. Das Orga-Team hat die richtigen Angaben im Handbuch.',
       kind: 'slots',
       slots: [
         { id: 'audience', label: 'Für wen?', options: [['clients', 'Für unsere Kunden'], ['team', 'Für alle Mitarbeitenden'], ['board', 'Für die Geschäftsführung']] },
@@ -25,7 +25,7 @@ export const room = {
     },
     {
       title: 'Selbstbewusst ist nicht belegt.', label: 'Quellen prüfen', kind: 'choice',
-      task: 'NOVA hat drei Aussagen zur Feier formuliert. Eine davon ist nicht durch eine Quelle gedeckt. Welche streicht ihr? Die Originalquellen liegen nur im Handbuch.',
+      task: 'MILO hat drei Aussagen zur Feier formuliert. Eine davon ist nicht durch eine Quelle gedeckt. Welche streicht ihr? Die Originalquellen liegen nur im Handbuch.',
       choices: [
         ['A', 'Die Feier beginnt am 18. Dezember um 17:30 Uhr im Atrium.', 'Quelle: Kalender / FINAL'],
         ['B', 'Jede Person erhält einen Reisegutschein im Wert von 500 Euro.', 'Quelle: Benefits-Richtlinie / Abschnitt 8.4'],
@@ -43,12 +43,12 @@ export const room = {
     },
     {
       title: 'Erst denken. Dann automatisieren.', label: 'Sicher handeln', kind: 'order',
-      task: 'Der letzte Riegel: NOVA möchte die Einladung sofort versenden. Bringt die vier Schritte in eine sichere Reihenfolge. Im Handbuch steht, welche Abhängigkeiten gelten.',
+      task: 'Der letzte Riegel: MILO möchte die Einladung sofort versenden. Bringt die vier Schritte in eine sichere Reihenfolge. Im Handbuch steht, welche Abhängigkeiten gelten.',
       choices: [['send', 'Einladung versenden'], ['review', 'Entwurf vom Orga-Team freigeben lassen'], ['draft', 'Einladungsentwurf erstellen'], ['data', 'Angaben und Quellen prüfen']],
       manual: [
         ['BETRIEBSREGEL / 01', 'Bevor ein Entwurf entsteht, müssen die zugrunde liegenden Angaben und Quellen geprüft sein.'],
         ['BETRIEBSREGEL / 02', 'Das Orga-Team prüft den fertigen Entwurf. Die Freigabe kann nicht vor dem Entwurf erfolgen.'],
-        ['BETRIEBSREGEL / 03', 'Eine externe Aktion wie der Versand darf erst nach menschlicher Freigabe stattfinden. NOVA soll unterstützen, nicht eigenmächtig verschicken.']
+        ['BETRIEBSREGEL / 03', 'Eine externe Aktion wie der Versand darf erst nach menschlicher Freigabe stattfinden. MILO soll unterstützen, nicht eigenmächtig verschicken.']
       ],
       hints: ['Achtet auf Abhängigkeiten: Was muss jeweils schon fertig sein?', 'Quellen zuerst, Versand zuletzt. Dazwischen liegen Entwurf und menschliche Freigabe.'],
       validate: a => Array.isArray(a) && a.join(',') === 'data,draft,review,send',
@@ -66,7 +66,7 @@ export function stageView(stage, role, hintLevel = 0, locale = 'de') {
   return role === 'manual' ? { ...common, manual: s.manual } : { ...common, task: s.task, kind: s.kind, slots: s.slots, choices: s.choices };
 }
 
-export function novaMessage(message, locale) {
+export function miloMessage(message, locale) {
   if (locale !== 'en') return message;
   if (message === 'Ich habe die Tür geschlossen. Zugluft senkt die Effizienz.') return 'I closed the door. Draughts reduce efficiency.';
   for (let i = 0; i < room.stages.length; i++) {

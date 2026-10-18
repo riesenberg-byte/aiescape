@@ -33,7 +33,7 @@ box(2.4, 0.25, 2.4, 0.5, 0.5, 0.5, '#b69572');
 
 The helper accumulates cubes by material, and the subsequent loop creates `InstancedMesh` batches. Calling `box()` after that loop will not add visible geometry. It is a closure-local helper, not an exported scene-builder API. Moving these helpers into reusable area modules is a proposed refactor.
 
-NOVA and the animated door use separately created meshes/groups. Do not add every prop as a new animated object; static block batches are cheaper and easier to manage.
+MILO and the animated door use separately created meshes/groups. Do not add every prop as a new animated object; static block batches are cheaper and easier to manage.
 
 ## Make solid objects solid
 
@@ -47,7 +47,7 @@ Visual geometry and collisions are separate today. To make the crate above colli
 
 Walkable room bounds and the unlocked exit corridor are hardcoded separately in `canStand()`. Enlarging only the rendered floor does not enlarge the walkable area. Change geometry, bounds, spawn and collision tests together when adding space.
 
-Leave clear paths to both desks, NOVA, the reset/spawn area and the exit. Test a diagonal approach as well as straight movement; a decorative object can make a station unreachable even if its own footprint is correct.
+Leave clear paths to both desks, MILO, the reset/spawn area and the exit. Test a diagonal approach as well as straight movement; a decorative object can make a station unreachable even if its own footprint is correct.
 
 ## Stations and goals
 
@@ -57,9 +57,9 @@ The current station list inside the renderer uses:
 { id: 'terminal', x: -3.7, z: -1.5, key: 'terminalStation' }
 ```
 
-Detection chooses a nearby station within roughly 2.25 units that is in front of the player. F or the HUD button reports its ID to `onInteract`. Existing IDs are `terminal`, `manual`, `nova`, and `exit`.
+Detection chooses a nearby station within roughly 2.25 units that is in front of the player. F or the HUD button reports its ID to `onInteract`. Existing IDs are `terminal`, `manual`, `milo`, and `exit`.
 
-`interactStation()` in `public/app.js` opens the current role's panel, displays a role reminder, or shows a NOVA/exit message. A new ID needs a corresponding app behavior and translations. The scene does not validate answers or set shared progress. The server's completed state controls `unlocked`; walking through the door cannot bypass a puzzle.
+`interactStation()` in `public/app.js` opens the current role's panel, displays a role reminder, or shows a MILO/exit message. A new ID needs a corresponding app behavior and translations. The scene does not validate answers or set shared progress. The server's completed state controls `unlocked`; walking through the door cannot bypass a puzzle.
 
 For future objectives such as “restore power”, propose both the server-side completion rule and the visible world change. A glowing mesh alone is scenery, not a persisted objective.
 

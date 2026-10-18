@@ -10,7 +10,7 @@ title: "[Mission] "
 - Location / area:
 - Players and target duration:
 - Learning theme:
-- Opening situation and NOVA's misunderstanding:
+- Opening situation and MILO's misunderstanding:
 - Final player objective and visible success:
 
 ## Stages

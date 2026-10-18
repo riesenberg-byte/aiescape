@@ -4,7 +4,7 @@ export const english = {
   stages: [
     {
       title: 'A break needs a brief', label: 'Clarify the request',
-      task: 'NOVA wants to schedule a coffee break. Ask the handbook who it is for and how long it should last.',
+      task: 'MILO wants to schedule a coffee break. Ask the handbook who it is for and how long it should last.',
       slots: [
         { id: 'audience', label: 'Who?', options: [['clients', 'Clients'], ['team', 'The team']] },
         { id: 'duration', label: 'How long?', options: [['ten', '10 minutes'], ['sixty', '60 minutes']] }

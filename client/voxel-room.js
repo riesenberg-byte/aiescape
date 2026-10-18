@@ -17,7 +17,7 @@ export function createVoxelRoom(host, { t, onInteract, unlocked = false, snapsho
   renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.35;
   renderer.domElement.tabIndex = 0;
   host.classList.add('voxel-shell');
-  host.innerHTML = '<div class="voxel-canvas"></div><div class="voxel-top"><span class="voxel-badge">3D / LIVE</span><button type="button" class="voxel-reset"></button></div><div class="voxel-crosshair" aria-hidden="true">+</div><div class="voxel-overlay"><strong>NOVA / SECTOR 01</strong><p class="voxel-instructions"></p><button class="button primary voxel-start" type="button"></button></div><div class="voxel-hud"><button type="button" class="voxel-interact"></button><button type="button" class="voxel-pause"></button></div><div class="voxel-pad" aria-label="Movement controls"><button type="button" data-walk="forward">↑</button><button type="button" data-walk="left">←</button><button type="button" data-walk="backward">↓</button><button type="button" data-walk="right">→</button></div><div class="voxel-location" aria-hidden="true"></div>';
+  host.innerHTML = '<div class="voxel-canvas"></div><div class="voxel-top"><span class="voxel-badge">3D / LIVE</span><button type="button" class="voxel-reset"></button></div><div class="voxel-crosshair" aria-hidden="true">+</div><div class="voxel-overlay"><strong>MILO / SECTOR 01</strong><p class="voxel-instructions"></p><button class="button primary voxel-start" type="button"></button></div><div class="voxel-hud"><button type="button" class="voxel-interact"></button><button type="button" class="voxel-pause"></button></div><div class="voxel-pad" aria-label="Movement controls"><button type="button" data-walk="forward">↑</button><button type="button" data-walk="left">←</button><button type="button" data-walk="backward">↓</button><button type="button" data-walk="right">→</button></div><div class="voxel-location" aria-hidden="true"></div>';
   const canvas = renderer.domElement;
   host.querySelector('.voxel-canvas').append(canvas);
   const overlay = host.querySelector('.voxel-overlay'), interactButton = host.querySelector('.voxel-interact');
@@ -112,7 +112,7 @@ export function createVoxelRoom(host, { t, onInteract, unlocked = false, snapsho
   function drawLabels() {
     for(const item of labelPlanes){const {ctx,c,texture,bg,color}=item;ctx.fillStyle=bg;ctx.fillRect(0,0,c.width,c.height);ctx.fillStyle=color;ctx.font='bold 48px monospace';ctx.textAlign='center';ctx.textBaseline='middle';const text=item.key==='exit'?(unlocked?'EXIT / OPEN':'EXIT / LOCKED') : t(item.key).toUpperCase();ctx.fillText(text,256,118,470);ctx.fillStyle='#72978a';ctx.fillRect(80,186,350,5);texture.needsUpdate=true;}
   }
-  const stations=[{id:'terminal',x:-3.7,z:-1.5,key:'terminalStation'},{id:'manual',x:3.7,z:-1.5,key:'manualStation'},{id:'nova',x:0,z:0,key:'novaStation'},{id:'exit',x:0,z:-5.7,key:'exitStation'}];
+  const stations=[{id:'terminal',x:-3.7,z:-1.5,key:'terminalStation'},{id:'manual',x:3.7,z:-1.5,key:'manualStation'},{id:'milo',x:0,z:0,key:'miloStation'},{id:'exit',x:0,z:-5.7,key:'exitStation'}];
   function interaction() {
     let closest=null, distance=2.25;
     for(const target of stations){const dx=target.x-player.x,dz=target.z-player.z,dist=Math.hypot(dx,dz);const dot=(-Math.sin(player.yaw)*dx-Math.cos(player.yaw)*dz)/(dist||1);if(dist<distance&&dot>0.05){distance=dist;closest=target;}}

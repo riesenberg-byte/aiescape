@@ -1,6 +1,6 @@
 # AI Escape
 
-A cooperative browser escape game about AI, good questions, and human teamwork. NOVA has optimised the office — with everyone still inside. Help it become a colleague and unlock the exit together.
+A cooperative browser escape game about AI, good questions, and human teamwork. MILO has optimised the office — with everyone still inside. Help it become a colleague and unlock the exit together.
 
 **[Play in English](https://aiescape.myapps.fans/?lang=en) · [Auf Deutsch spielen](https://aiescape.myapps.fans/?lang=de) · [Deutscher Einstieg](docs/quickstart.de.md)**
 
@@ -33,11 +33,11 @@ Select **Explore the 3D lab** on the home page, or use the mission's 3D view. **
 
 ## Current state and direction
 
-Version **0.2.1** includes one complete mission, the Prompt Lab: precise instructions, source checking, and a safe approval workflow. It has English/German text, asymmetric cooperative views, a walkable voxel room, shared progress, hints, and an optional leaderboard.
+Version **0.2.2** includes one complete mission, the Prompt Lab: precise instructions, source checking, and a safe approval workflow. It has English/German text, asymmetric cooperative views, a walkable voxel room, shared progress, hints, and an optional leaderboard.
 
 The direction is a connected landscape with several missions, meaningful objectives, and areas colleagues can build together. **Mission selection, campaign progression, a data-driven world editor, and shared 3D avatars are planned work**, not existing features. See the [roadmap](docs/roadmap.md) for dependencies and acceptance criteria.
 
-NOVA's responses are authored text. The current game does not call an AI model.
+MILO's responses are authored text. The current game does not call an AI model.
 
 ## Local quick start
 

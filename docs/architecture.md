@@ -31,7 +31,7 @@ The build currently reads a **flat public directory**, accepts `.html`, `.js`, `
 | `client/voxel-room.js` | Geometry, rendering, labels, input, nearby station detection and disposal |
 | `client/world.js` | Spawn, obstacle footprints, walkable bounds and movement collision |
 | `src/index.js` | HTTP/security headers, assets, API, auth tokens, SQL and scoring |
-| `src/rooms/prompt-lab.js` | German canonical content, validators, role projection and NOVA-message translation |
+| `src/rooms/prompt-lab.js` | German canonical content, validators, role projection and MILO-message translation |
 | `src/rooms/prompt-lab.en.js` | English mission text with matching option IDs |
 | `src/errors.en.js` | English mapping for canonical server errors |
 | `migrations/0001_sessions.sql` | Initial relational schema and indexes |
@@ -58,7 +58,7 @@ stateDiagram-v2
 
 Creation returns a team code and an individual random player token. The browser stores that token in session storage; the database stores only its SHA-256 hash. A code admits a teammate with a new token. It is a lightweight capability-based game session, not an account/login system.
 
-`sessions.stage` is a zero-based cursor. `started_at` is set once by a terminal. A correct answer increments the cursor, resets the current hint level, and writes NOVA's success text. A wrong answer adds a mistake without advancing. The final answer sets `finished_at`. Dates are epoch milliseconds; the timer uses the server's timestamps and clock offset.
+`sessions.stage` is a zero-based cursor. `started_at` is set once by a terminal. A correct answer increments the cursor, resets the current hint level, and writes MILO's success text. A wrong answer adds a mistake without advancing. The final answer sets `finished_at`. Dates are epoch milliseconds; the timer uses the server's timestamps and clock offset.
 
 Progress-changing gameplay writes use `WHERE code = ? AND revision = ?` and increment `revision`. A stale or concurrent submission returns 409 instead of advancing twice. Role changes update a player row; leaderboard publishing is a separate completed-session action and does not use the gameplay revision guard. Do not assume every POST requires the same revision semantics.
 
@@ -79,7 +79,7 @@ The leaderboard score is elapsed whole seconds + 60 per hint + 15 per mistake. R
 
 `stageView(stage, role, hintLevel, locale)` serializes only the appropriate content. A terminal gets the task and choices/slots; a handbook gets source notes. Both see already-unlocked hints. Validator functions stay on the server. Manual roles cannot submit gameplay answers.
 
-Each request carries `X-Game-Language: de` or `en`; absent/unsupported values use German. Session data and answer IDs remain language independent. Canonical NOVA messages are currently stored as German text and mapped to English on read. Changing those canonical strings can affect existing sessions; future content versions should use stable message IDs.
+Each request carries `X-Game-Language: de` or `en`; absent/unsupported values use German. Session data and answer IDs remain language independent. Canonical MILO messages are currently stored as German text and mapped to English on read. Changing those canonical strings can affect existing sessions; future content versions should use stable message IDs.
 
 ## Scene and state boundaries
 

@@ -120,7 +120,7 @@ test('rate limiting prevents database access after the limit is reached',async()
   assert.equal((await api('/api/sessions',{team:'Limited'})).status,429);
 });
 
-test('English and German teammates share progress, stable answers, and translated NOVA messages',async()=>{
+test('English and German teammates share progress, stable answers, and translated MILO messages',async()=>{
   const DB=database(),api=client({DB}),en={'X-Game-Language':'en'};
   const created=await api('/api/sessions',{team:'Mixed language team',location:'München'},undefined,en);
   const token=created.data.token,code=created.data.state.code;

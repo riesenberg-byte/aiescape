@@ -10,7 +10,7 @@ A safe first content contribution improves the existing module, or adds an unreg
 
 ## Module contract today
 
-The active module exports `room`, `stageView()`, and `novaMessage()`. German content is canonical; the English module supplies matching text and option IDs. The example follows the same export shapes.
+The active module exports `room`, `stageView()`, and `miloMessage()`. German content is canonical; the English module supplies matching text and option IDs. The example follows the same export shapes.
 
 | Room field | Meaning |
 | --- | --- |
@@ -28,7 +28,7 @@ Every stage has:
 | `manual` | Array of `[heading, body]` handbook notes |
 | `hints` | Ordered hint strings; the existing UI assumes up to two |
 | `validate(answer)` | Synchronous server-only function returning a boolean |
-| `success`, `failure` | NOVA's canonical responses |
+| `success`, `failure` | MILO's canonical responses |
 
 ### Supported puzzle shapes
 
@@ -75,7 +75,7 @@ Both roles can see the current stage's public heading. The handbook's facts shou
 
 1. Keep `id`, slot IDs, option IDs, choice IDs, order IDs and validators identical across languages.
 2. Match stage count, option sets, clue meaning and hint usefulness in German and English.
-3. Supply English `success` and `failure` strings. The current `novaMessage()` maps canonical stored strings to English, including responses in existing sessions.
+3. Supply English `success` and `failure` strings. The current `miloMessage()` maps canonical stored strings to English, including responses in existing sessions.
 4. Update any UI dictionary labels that describe the changed task; the current progress list is separate from stage data.
 5. If changing stage order, validator meaning or canonical messages, explain the effect on teams already playing. The prototype does not pin a content version per session.
 

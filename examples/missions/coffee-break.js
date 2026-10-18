@@ -6,7 +6,7 @@ export const room = {
   stages: [
     {
       title: 'Auch eine Pause braucht einen Auftrag', label: 'Auftrag klären', kind: 'slots',
-      task: 'NOVA möchte eine Kaffeepause planen. Fragt das Handbuch, für wen sie gedacht ist und wie lange sie dauern soll.',
+      task: 'MILO möchte eine Kaffeepause planen. Fragt das Handbuch, für wen sie gedacht ist und wie lange sie dauern soll.',
       slots: [
         { id: 'audience', label: 'Für wen?', options: [['clients', 'Kunden'], ['team', 'Das Team']] },
         { id: 'duration', label: 'Wie lange?', options: [['ten', '10 Minuten'], ['sixty', '60 Minuten']] }
@@ -50,7 +50,7 @@ export function stageView(index, role, hintLevel = 0, locale = 'de') {
     : { ...common, task: stage.task, kind: stage.kind, slots: stage.slots, choices: stage.choices };
 }
 
-export function novaMessage(message, locale) {
+export function miloMessage(message, locale) {
   if (locale !== 'en') return message;
   for (let i = 0; i < room.stages.length; i++) {
     for (const key of ['success', 'failure']) {

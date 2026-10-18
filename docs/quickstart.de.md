@@ -2,7 +2,7 @@
 
 Die Idee: Wir entwickeln zusammen eine spannende, begehbare Landschaft mit mehreren Missionen und Zielen. Kollegen können Rätsel, Dialoge, Übersetzungen, Gebäude, kleine Requisiten oder Code beitragen. Die technischen Anleitungen sind überwiegend auf Englisch, damit auch unsere rumänischen Kollegen direkt mitarbeiten können.
 
-**Aktuell spielbar:** eine Mission, das Prompt-Labor, mit drei Rätseln, deutschem/englischem Handbuch, NOVA und einem begehbaren 3D-Raum. Eine Missionsauswahl, eine größere Landschaft und gemeinsame 3D-Avatare sind noch nicht umgesetzt. Der [Entwicklungsfahrplan](roadmap.md) beschreibt die vorgeschlagenen Schritte dorthin.
+**Aktuell spielbar:** eine Mission, das Prompt-Labor, mit drei Rätseln, deutschem/englischem Handbuch, MILO und einem begehbaren 3D-Raum. Eine Missionsauswahl, eine größere Landschaft und gemeinsame 3D-Avatare sind noch nicht umgesetzt. Der [Entwicklungsfahrplan](roadmap.md) beschreibt die vorgeschlagenen Schritte dorthin.
 
 ## Lokal starten
 

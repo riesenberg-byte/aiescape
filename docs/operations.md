@@ -61,7 +61,7 @@ For a failure, capture route, status, deployment/version ID and a reproducible d
 
 ## Session data and retention
 
-- Stored data: invented team name, selected location, timestamps, stage, hints, mistakes, canonical NOVA text, opt-in flag and hashed player tokens. Positions/avatars are not stored.
+- Stored data: invented team name, selected location, timestamps, stage, hints, mistakes, canonical MILO text, opt-in flag and hashed player tokens. Positions/avatars are not stored.
 - Session access expires **24 hours after creation**, not 24 hours after starting play.
 - Creating a new team triggers deletion of unlisted sessions older than 24 hours and all sessions older than 30 days. This is request-triggered cleanup, not a scheduled deletion guarantee.
 - The current leaderboard query does not itself filter by age; old published entries may remain visible until that cleanup runs. A periodic cleanup job/age filter is future work if precise retention is required.

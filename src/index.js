@@ -1,5 +1,5 @@
 import { assets } from './generated/assets.js';
-import { room, stageView, novaMessage } from './rooms/prompt-lab.js';
+import { room, stageView, miloMessage } from './rooms/prompt-lab.js';
 import { errorsEnglish } from './errors.en.js';
 
 const SECURITY = {
@@ -49,7 +49,7 @@ async function view(env, p, s, locale = 'de') {
   const counts = await env.DB.prepare('SELECT role, COUNT(*) AS count FROM players WHERE session_code = ? GROUP BY role').bind(s.code).all();
   return { code: s.code, team: s.team, location: s.location, role: p.role, stage: s.stage, revision: s.revision,
     startedAt: s.started_at, finishedAt: s.finished_at, hints: s.hints, mistakes: s.mistakes,
-    message: novaMessage(s.last_message, locale), locale, listed: Boolean(s.listed), serverTime: Date.now(),
+    message: miloMessage(s.last_message, locale), locale, listed: Boolean(s.listed), serverTime: Date.now(),
     score: s.finished_at ? score(s) : null, players: counts.results,
     room: { id: room.id, title: locale === 'en' ? 'The Prompt Lab' : room.title, total: room.stages.length },
     puzzle: stageView(s.stage, p.role, s.hint_level, locale) };
@@ -111,7 +111,7 @@ async function api(request, env, pathname) {
     if (!s.finished_at) fail(409, 'Schließt zuerst die Mission ab.');
     await env.DB.prepare('UPDATE sessions SET listed = 1, revision = revision + 1 WHERE code = ?').bind(s.code).run();
   } else {
-    if (p.role !== 'terminal') fail(403, 'Nur das Terminal kann NOVA Befehle geben. Teilt eure Hinweise im Gespräch.');
+    if (p.role !== 'terminal') fail(403, 'Nur das Terminal kann MILO Befehle geben. Teilt eure Hinweise im Gespräch.');
     if (data.revision !== s.revision) fail(409, 'Euer Team war schneller. Der Spielstand wird aktualisiert.');
     if (s.finished_at) fail(409, 'Die Mission ist bereits abgeschlossen.');
     let query; let params;
@@ -150,13 +150,13 @@ export default {
       const asset = assets[pathname === '/' ? '/index.html' : pathname];
       if (!asset) return json({ error: locale === 'en' ? errorsEnglish['Nicht gefunden.'] : 'Nicht gefunden.' }, 404);
       const content = pathname === '/manifest.webmanifest' && new URL(request.url).searchParams.get('lang') === 'en'
-        ? JSON.stringify({ ...JSON.parse(asset.body), name: 'AI Escape — NOVA’s Prompt Lab', lang: 'en', start_url: '/?lang=en' }) : asset.body;
+        ? JSON.stringify({ ...JSON.parse(asset.body), name: 'AI Escape — MILO’s Prompt Lab', lang: 'en', start_url: '/?lang=en' }) : asset.body;
       return new Response(request.method === 'HEAD' ? null : content, { headers: { ...SECURITY, 'Content-Type': asset.type,
         'Cache-Control': pathname === '/' || pathname === '/sw.js' ? 'no-cache' : 'public, max-age=300' } });
     } catch (error) {
       if (error instanceof HttpError) return json({ error: locale === 'en' ? errorsEnglish[error.message] || 'Please try again.' : error.message }, error.status);
       console.error(JSON.stringify({ event: 'request_failed', path: pathname, name: error.name }));
-      return json({ error: locale === 'en' ? errorsEnglish['NOVA hat sich verheddert. Bitte gleich erneut versuchen.'] : 'NOVA hat sich verheddert. Bitte gleich erneut versuchen.' }, 500);
+      return json({ error: locale === 'en' ? errorsEnglish['MILO hat sich verheddert. Bitte gleich erneut versuchen.'] : 'MILO hat sich verheddert. Bitte gleich erneut versuchen.' }, 500);
     }
   }
 };

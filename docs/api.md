@@ -71,7 +71,7 @@ These are reference shapes, including current solutions. The revision numbers ar
 | --- | --- | --- |
 | 400 | Invalid team, code, action or role | Correct the input |
 | 401 | Missing/unknown player token | Join/create a team |
-| 403 | Wrong browser origin or handbook trying to control NOVA | Check origin or use the terminal role |
+| 403 | Wrong browser origin or handbook trying to control MILO | Check origin or use the terminal role |
 | 404 | Unknown endpoint or missing/expired code when joining | Check route/code |
 | 405 | Unsupported method | Use the documented method |
 | 409 | Stale revision, wrong lifecycle state, or no more hints | Refresh state before another intentional action |
