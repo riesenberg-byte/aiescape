@@ -155,9 +155,9 @@ export default {
       const asset = assets[pathname === '/' ? '/index.html' : pathname];
       if (!asset) return json({ error: locale === 'en' ? errorsEnglish['Nicht gefunden.'] : 'Nicht gefunden.' }, 404);
       const content = pathname === '/manifest.webmanifest' && new URL(request.url).searchParams.get('lang') === 'en'
-        ? JSON.stringify({ ...JSON.parse(asset.body), name: 'AI Escape — MILO’s Prompt Lab', lang: 'en', start_url: '/?lang=en' }) : asset.body;
+        ? JSON.stringify({ ...JSON.parse(asset.body), name: 'AI Escape — MILO’s Prompt Lab', lang: 'en', start_url: '/pwa-start-en.html' }) : asset.body;
       return new Response(request.method === 'HEAD' ? null : content, { headers: { ...SECURITY, 'Content-Type': asset.type,
-        'Cache-Control': pathname === '/' || pathname === '/sw.js' ? 'no-cache' : 'public, max-age=300' } });
+        'Cache-Control': pathname === '/' || pathname === '/sw.js' || pathname.startsWith('/pwa-start') ? 'no-cache' : 'public, max-age=300' } });
     } catch (error) {
       if (error instanceof HttpError) return json({ error: locale === 'en' ? errorsEnglish[error.message] || 'Please try again.' : error.message }, error.status);
       console.error(JSON.stringify({ event: 'request_failed', path: pathname, name: error.name }));
