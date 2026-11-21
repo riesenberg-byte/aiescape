@@ -3,7 +3,9 @@ import { room, stageView, miloMessage } from './rooms/prompt-lab.js';
 import { errorsEnglish } from './errors.en.js';
 import { EVENT, isLocation } from '../public/event-config.js';
 
+// Privates Spiel: nicht in Suchmaschinen (Entscheidung 21.11.2026).
 const SECURITY = {
+  'X-Robots-Tag': 'noindex, nofollow',
   'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'no-referrer',
   'X-Frame-Options': 'DENY',
   'Content-Security-Policy': "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'",
